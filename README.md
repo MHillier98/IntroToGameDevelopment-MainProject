@@ -1,5 +1,8 @@
 # IntroToGameDevelopment-MainProject
-The Unity game project for Assessments 3 + 4, for Intro To Game Development
+The Unity game project for Assessments 3 + 4, for Intro To Game Development.
+
+This project was built in [Unity 2018.3.8](https://unity.com/)
+
 
 # Task
 The aim of these two assignments was to recreate a classic game in the Unity game engine.
