@@ -30,4 +30,14 @@ public class PlayerController : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 0, 0);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // this is all one big gameobject (the tilemap)
+        // todo: remake this.
+
+        // collision.gameObject.active = false;
+        // Debug.Log("");
+        
+    }
 }
