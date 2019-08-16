@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ms Pac-Man
   - Ghost
+  - Dots
   layers:
   - Default
   - TransparentFX

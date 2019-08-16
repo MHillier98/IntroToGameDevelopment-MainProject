@@ -502,6 +502,7 @@ GameObject:
   - component: {fileID: 873624699}
   - component: {fileID: 873624698}
   - component: {fileID: 873624700}
+  - component: {fileID: 873624701}
   m_Layer: 0
   m_Name: Ms Pac-Man
   m_TagString: Ms Pac-Man
@@ -590,6 +591,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &873624701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873624697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d90df33bfad60f4384dd5f0f7753b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
 --- !u!1 &1025911002
 GameObject:
   m_ObjectHideFlags: 0
