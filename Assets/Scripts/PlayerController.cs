@@ -31,13 +31,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SetScore(int newScore)
+    {
+        score = newScore;
+    }
+
+    public void AddScore(int addScore)
+    {
+        score += addScore;
+    }
+
+    public void IncrementScore()
+    {
+        score += 1;
+    }
+
+    public int GetScore()
+    {
+        return score;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // this is all one big gameobject (the tilemap)
-        // todo: remake this.
+        // Debug.Log(collision.name);
 
-        // collision.gameObject.active = false;
-        // Debug.Log("");
-        
+        // I can set the dots to not be active, if i want to reactivate them for new levels
+        if (collision.tag.Equals("Dots"))
+        {
+            Destroy(collision.gameObject);
+            // collision.gameObject.SetActive(false);
+            AddScore(10);
+        }
+        else if (collision.tag.Equals("Large Dots"))
+        {
+            Destroy(collision.gameObject);
+            // collision.gameObject.SetActive(false);
+            AddScore(50);
+        }
     }
 }
