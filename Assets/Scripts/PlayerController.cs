@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
+    public string movementDirection = "Right";
 
     void Start()
     {
@@ -24,25 +26,77 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        HandleMovementInput();
+        Movement();
+        //AnimateSprite(); // the rotations mess up the movement code
+        // maybe i can rotate the sprite? need to figure out the collisions
+    }
+
+    private void HandleMovementInput()
+    {
+        if (Input.GetAxis("Horizontal") > 0)
+        {
+            Debug.Log("R");
+            movementDirection = "Right";
+        }
+        else if (Input.GetAxis("Horizontal") < 0)
+        {
+            Debug.Log("L");
+            movementDirection = "Left";
+        }
+        else if (Input.GetAxis("Vertical") > 0)
+        {
+            Debug.Log("U");
+            movementDirection = "Up";
+        }
+        else if (Input.GetAxis("Vertical") < 0)
+        {
+            Debug.Log("D");
+            movementDirection = "Down";
+        }
+    }
+
+    private void Movement()
+    {
+        if (movementDirection.Equals("Right"))
+        {
+            transform.Translate(0.08f, 0f, 0f);
+        }
+        else if (movementDirection.Equals("Left"))
+        {
+            transform.Translate(-0.08f, 0f, 0f);
+        }
+        else if (movementDirection.Equals("Up"))
+        {
+            transform.Translate(0f, 0.08f, 0f);
+        }
+        else if (movementDirection.Equals("Down"))
+        {
+            transform.Translate(0f, -0.08f, 0f);
+        }
+    }
+
+    private void AnimateSprite()
+    {
+        if (movementDirection.Equals("Right"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (movementDirection.Equals("Left"))
         {
             spriteRenderer.flipY = true;
             transform.eulerAngles = new Vector3(0, 0, 180);
         }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        else if (movementDirection.Equals("Up"))
+        {
+            spriteRenderer.flipY = false;
+            transform.eulerAngles = new Vector3(0, 0, 90);
+        }
+        else if (movementDirection.Equals("Down"))
         {
             spriteRenderer.flipY = false;
             transform.eulerAngles = new Vector3(0, 0, 270);
-        }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 0);
         }
     }
 

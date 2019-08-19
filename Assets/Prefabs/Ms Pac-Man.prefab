@@ -114,7 +114,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d90df33bfad60f4384dd5f0f7753b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
+  startingScore: 0
+  dotScore: 10
+  largeDotScore: 50
+  poweredUp: 0
+  poweredUpTime: 6
+  movementDirection: Right
 --- !u!50 &4403822621839253141
 Rigidbody2D:
   serializedVersion: 4
