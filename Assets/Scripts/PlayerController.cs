@@ -27,53 +27,54 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMovementInput();
+        AnimateSprite();
         Movement();
-        //AnimateSprite(); // the rotations mess up the movement code
-        // maybe i can rotate the sprite? need to figure out the collisions
     }
 
     private void HandleMovementInput()
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            Debug.Log("R");
+            // Debug.Log("R");
             movementDirection = "Right";
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            Debug.Log("L");
+            // Debug.Log("L");
             movementDirection = "Left";
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            Debug.Log("U");
+            // Debug.Log("U");
             movementDirection = "Up";
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            Debug.Log("D");
+            // Debug.Log("D");
             movementDirection = "Down";
         }
     }
 
     private void Movement()
     {
-        if (movementDirection.Equals("Right"))
-        {
-            transform.Translate(0.08f, 0f, 0f);
-        }
-        else if (movementDirection.Equals("Left"))
-        {
-            transform.Translate(-0.08f, 0f, 0f);
-        }
-        else if (movementDirection.Equals("Up"))
-        {
-            transform.Translate(0f, 0.08f, 0f);
-        }
-        else if (movementDirection.Equals("Down"))
-        {
-            transform.Translate(0f, -0.08f, 0f);
-        }
+        transform.Translate(0.08f, 0f, 0f);
+
+        //if (movementDirection.Equals("Right"))
+        //{
+        //    transform.Translate(0.08f, 0f, 0f);
+        //}
+        //else if (movementDirection.Equals("Left"))
+        //{
+        //    transform.Translate(-0.08f, 0f, 0f);
+        //}
+        //else if (movementDirection.Equals("Up"))
+        //{
+        //    transform.Translate(0f, 0.08f, 0f);
+        //}
+        //else if (movementDirection.Equals("Down"))
+        //{
+        //    transform.Translate(0f, -0.08f, 0f);
+        //}
     }
 
     private void AnimateSprite()
@@ -116,6 +117,10 @@ public class PlayerController : MonoBehaviour
             AddScore(largeDotScore);
             PowerUp();
             Invoke("PowerDown", poweredUpTime);
+        }
+        else if (collision.tag.Equals("Ghosts"))
+        {
+            Destroy(this);
         }
     }
 
