@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7257154404605526124}
   - component: {fileID: 756352329716456000}
   - component: {fileID: 1230749668187688419}
+  - component: {fileID: 2923626827304129816}
   m_Layer: 15
   m_Name: Large Dot
   m_TagString: Large Dots
@@ -106,3 +107,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &2923626827304129816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879079922027158748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60b6b479a0a5059449230707f3e5f3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleObject: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
+    type: 3}
