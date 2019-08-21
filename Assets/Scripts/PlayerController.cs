@@ -5,76 +5,67 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
+
     public int startingScore = 0;
     private int score = 0;
 
-    public int dotScore = 10;
+    public int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
     public int largeDotScore = 50;
 
     public bool poweredUp = false;
-    public int poweredUpTime = 6;
+    public int poweredUpTimeMax = 6;
+    public int poweredUpTimeCurrent;
 
-    SpriteRenderer spriteRenderer;
-
+    public float movementSpeed = 0.1f;
     public string movementDirection = "Right";
+
+    public AudioClip chomp1;
+    public AudioClip chomp2;
+    private bool playedChomp1 = false;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+
+        //audioSource.clip = Resources.Load<AudioClip>("Audio/Chomp");
+
         score = startingScore;
+        poweredUpTimeCurrent = poweredUpTimeMax;
     }
 
     void Update()
     {
         HandleMovementInput();
         AnimateSprite();
-        Movement();
+        Move();
     }
 
     private void HandleMovementInput()
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            // Debug.Log("R");
             movementDirection = "Right";
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            // Debug.Log("L");
             movementDirection = "Left";
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            // Debug.Log("U");
             movementDirection = "Up";
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            // Debug.Log("D");
             movementDirection = "Down";
         }
     }
 
-    private void Movement()
+    private void Move()
     {
-        transform.Translate(0.08f, 0f, 0f);
-
-        //if (movementDirection.Equals("Right"))
-        //{
-        //    transform.Translate(0.08f, 0f, 0f);
-        //}
-        //else if (movementDirection.Equals("Left"))
-        //{
-        //    transform.Translate(-0.08f, 0f, 0f);
-        //}
-        //else if (movementDirection.Equals("Up"))
-        //{
-        //    transform.Translate(0f, 0.08f, 0f);
-        //}
-        //else if (movementDirection.Equals("Down"))
-        //{
-        //    transform.Translate(0f, -0.08f, 0f);
-        //}
+        transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
     }
 
     private void AnimateSprite()
@@ -106,6 +97,8 @@ public class PlayerController : MonoBehaviour
         // i could set the dots to not be active, if i want to reactivate them for new levels
         if (collision.tag.Equals("Dots"))
         {
+            PlayEatSound();
+
             Destroy(collision.gameObject);
             // collision.gameObject.SetActive(false);
             AddScore(dotScore);
@@ -116,11 +109,25 @@ public class PlayerController : MonoBehaviour
             // collision.gameObject.SetActive(false);
             AddScore(largeDotScore);
             PowerUp();
-            Invoke("PowerDown", poweredUpTime);
+            Invoke("PowerDown", poweredUpTimeCurrent);
         }
         else if (collision.tag.Equals("Ghosts"))
         {
             Destroy(this);
+        }
+    }
+
+    public void PlayEatSound()
+    {
+        if (playedChomp1)
+        {
+            audioSource.PlayOneShot(chomp2);
+            playedChomp1 = false;
+        }
+        else
+        {
+            audioSource.PlayOneShot(chomp1);
+            playedChomp1 = true;
         }
     }
 
