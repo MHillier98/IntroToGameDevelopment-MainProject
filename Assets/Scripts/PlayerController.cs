@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public int poweredUpTimeMax = 6;
     public int poweredUpTimeCurrent;
 
+    public bool isMoving = true;
     public float movementSpeed = 0.1f;
     public string movementDirection = "Right";
 
@@ -40,7 +41,10 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovementInput();
         AnimateSprite();
-        Move();
+        if (isMoving)
+        {
+            Move();
+        }
     }
 
     private void HandleMovementInput()
