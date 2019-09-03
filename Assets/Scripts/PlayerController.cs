@@ -40,11 +40,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMovementInput();
-        AnimateSprite();
         if (isMoving)
         {
             Move();
         }
+        AnimateSprite();
     }
 
     private void HandleMovementInput()
