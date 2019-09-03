@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ms Pac-Man
+  - Dots
+  - Walls
+  - Ghosts
+  - Large Dots
   layers:
   - Default
   - TransparentFX
@@ -13,16 +18,16 @@ TagManager:
   - UI
   - 
   - 
+  - Ghosts
   - 
   - 
+  - Ms PacMan
   - 
   - 
+  - Dots
+  - Large Dots
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Walls
   - 
   - 
   - 
@@ -40,4 +45,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 1411592683
+    locked: 0
+  - name: Ghosts
+    uniqueID: 884613931
+    locked: 0
+  - name: Dots
+    uniqueID: 1791609971
+    locked: 0
+  - name: Large Dots
+    uniqueID: 251032781
+    locked: 0
+  - name: Ms PacMan
+    uniqueID: 3895603
     locked: 0
