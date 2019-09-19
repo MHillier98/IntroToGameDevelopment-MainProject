@@ -119,7 +119,8 @@ MonoBehaviour:
   dotScore: 10
   largeDotScore: 50
   poweredUp: 0
-  poweredUpTime: 6
+  poweredUpTimeMax: 6
+  poweredUpTimeCurrent: 0
   movementSpeed: 6
   movementDirection: Right
   chomp1: {fileID: 8300000, guid: aeb3af9e71a40cc43bdc53d21abfc4cf, type: 3}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LargeDotController : MonoBehaviour
 {
-    public GameObject particleObject;
+    [SerializeField] private GameObject particleObject;
 
     private void OnDestroy()
     {

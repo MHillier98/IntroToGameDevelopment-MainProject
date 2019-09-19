@@ -8,22 +8,23 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
-    public int startingScore = 0;
-    private int score = 0;
+    [SerializeField] private int startingScore = 0;
+    [SerializeField] private int currentScore = 0;
 
-    public int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
-    public int largeDotScore = 50;
+    [SerializeField] private int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
+    [SerializeField] private int largeDotScore = 50;
 
-    public bool poweredUp = false;
-    public int poweredUpTimeMax = 6;
-    public int poweredUpTimeCurrent;
+    [SerializeField] private bool poweredUp = false;
+    [SerializeField] private int poweredUpTimeMax = 6;
+    [SerializeField] private int poweredUpTimeCurrent;
 
-    public float movementSpeed = 0.1f;
-    public string movementDirection = "Right";
+    [SerializeField] private bool canMove = true;
+    [SerializeField] private float movementSpeed = 0.1f;
+    [SerializeField] private string movementDirection = "Right";
 
-    public AudioClip chomp1;
-    public AudioClip chomp2;
-    private bool playedChomp1 = false;
+    [SerializeField] private AudioClip chomp1;
+    [SerializeField] private AudioClip chomp2;
+    [SerializeField] private bool playedChomp1 = false;
 
     void Start()
     {
@@ -32,14 +33,14 @@ public class PlayerController : MonoBehaviour
 
         //audioSource.clip = Resources.Load<AudioClip>("Audio/Chomp");
 
-        score = startingScore;
+        currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
     }
 
     void Update()
     {
         HandleMovementInput();
-        if (CheckCanMove())
+        if (CheckCanMove(movementDirection))
         {
             Move();
         }
@@ -51,35 +52,84 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxis("Horizontal") > 0)
         {
             movementDirection = "Right";
+
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
             movementDirection = "Left";
+
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
             movementDirection = "Up";
+
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
             movementDirection = "Down";
+
         }
+
+        Debug.Log(movementDirection);
     }
 
-    private bool CheckCanMove()
+    private bool CheckCanMove(string direction)
     {
+        Vector3 rayDir = Vector3.zero;
+        switch (direction)
+        {
+            case "Right":
+                rayDir = Vector3.right;
+                break;
+            case "Left":
+                rayDir = Vector3.left;
+                break;
+            case "Up":
+                rayDir = Vector3.up;
+                break;
+            case "Down":
+                rayDir = Vector3.down;
+                break;
+            default: break;
+        }
 
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDir, 1f);
+        Debug.DrawRay(transform.position, rayDir, Color.red);
 
+        if (hit.collider != null && hit.collider.tag != null && hit.collider.tag == "Walls")
+        {
+            return false;
+        }
 
         return true;
     }
 
     void FixedUpdate()
     {
-        Vector3 hitDirection = transform.TransformDirection(Vector3.right);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, hitDirection);
-        Debug.DrawRay(transform.position, hitDirection);
+        //Debug.DrawRay(transform.position, Vector3.up, Color.red);
+        //Debug.DrawRay(transform.position, Vector3.down, Color.red);
+        //Debug.DrawRay(transform.position, Vector3.left, Color.red);
+        //Debug.DrawRay(transform.position, Vector3.right, Color.red);
 
+        //Vector3 hitDirection1 = transform.TransformDirection(new Vector3(1f, 1f));
+        //Vector3 hitDirection2 = transform.TransformDirection(new Vector3(1f, -1f));
+
+        //RaycastHit2D hit1 = Physics2D.Raycast(transform.position, hitDirection1);
+        //RaycastHit2D hit2 = Physics2D.Raycast(transform.position, hitDirection2);
+
+        //Debug.DrawRay(transform.position, hitDirection1, Color.red);
+        //Debug.DrawRay(transform.position, hitDirection2, Color.black);
+
+        //if (hit1.collider != null && hit1.collider.tag != null && hit1.collider.tag == "Walls" && hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
+        //{
+        //    Debug.Log(hit1.collider.tag);
+        //    Debug.Log(hit2.collider.tag);
+        //    canMove = false;
+        //}
+        //else
+        //{
+        //    canMove = true;
+        //}
     }
 
     private void Move()
@@ -152,22 +202,22 @@ public class PlayerController : MonoBehaviour
 
     public void SetScore(int newScore)
     {
-        score = newScore;
+        currentScore = newScore;
     }
 
     public void AddScore(int addScore)
     {
-        score += addScore;
+        currentScore += addScore;
     }
 
     public void IncrementScore()
     {
-        score += 1;
+        currentScore += 1;
     }
 
     public int GetScore()
     {
-        return score;
+        return currentScore;
     }
 
     public void PowerUp()

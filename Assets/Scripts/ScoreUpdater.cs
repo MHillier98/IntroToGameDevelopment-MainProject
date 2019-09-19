@@ -5,13 +5,11 @@ using TMPro;
 
 public class ScoreUpdater : MonoBehaviour
 {
-    public bool isHighScorer = false;
-
-    [SerializeField]
-    private int highScore = 0;
-
     private TextMeshProUGUI scorerText;
     private PlayerController playerController;
+
+    [SerializeField] private bool isHighScorer = false;
+    [SerializeField] private int highScore = 0;
 
     void Start()
     {
@@ -29,6 +27,7 @@ public class ScoreUpdater : MonoBehaviour
     void Update()
     {
         int playerScore = playerController.GetScore();
+
         if (isHighScorer)
         {
             if (playerScore > highScore)
