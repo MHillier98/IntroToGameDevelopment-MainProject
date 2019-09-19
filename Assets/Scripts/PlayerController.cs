@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     public int poweredUpTimeMax = 6;
     public int poweredUpTimeCurrent;
 
-    public bool isMoving = true;
     public float movementSpeed = 0.1f;
     public string movementDirection = "Right";
 
@@ -40,7 +39,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMovementInput();
-        if (isMoving)
+        if (CheckCanMove())
         {
             Move();
         }
@@ -65,6 +64,22 @@ public class PlayerController : MonoBehaviour
         {
             movementDirection = "Down";
         }
+    }
+
+    private bool CheckCanMove()
+    {
+
+
+
+        return true;
+    }
+
+    void FixedUpdate()
+    {
+        Vector3 hitDirection = transform.TransformDirection(Vector3.right);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, hitDirection);
+        Debug.DrawRay(transform.position, hitDirection);
+
     }
 
     private void Move()
