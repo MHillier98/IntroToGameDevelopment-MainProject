@@ -5,46 +5,50 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private AudioSource audioSource;
+    private static SpriteRenderer spriteRenderer;
+    private static AudioSource audioSource;
 
-    [SerializeField] private int startingScore = 0;
+    [SerializeField] private static int startingScore = 0;
     [SerializeField] private int currentScore = 0;
 
     [SerializeField] private static int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
     [SerializeField] private static int largeDotScore = 50;
 
     [SerializeField] private bool poweredUp = false;
-    [SerializeField] private int poweredUpTimeMax = 6;
+    [SerializeField] private static int poweredUpTimeMax = 6;
     [SerializeField] private int poweredUpTimeCurrent;
 
-    [SerializeField] private bool canMove = true;
-    [SerializeField] private float movementSpeed = 0.1f;
+    [SerializeField] private static float movementSpeed = 0.1f;
     [SerializeField] private string movementDirection = "Right";
 
-    [SerializeField] private AudioClip chomp1;
-    [SerializeField] private AudioClip chomp2;
     [SerializeField] private bool playedChomp1 = false;
+    [SerializeField] public static AudioClip chomp1 = null;
+    [SerializeField] public static AudioClip chomp2 = null;
 
-    [SerializeField] private GameObject particleObject;
+    [SerializeField] public static GameObject particleObject = null;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        movementDirection = "Right";
         currentScore = startingScore;
+        poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
+        movementSpeed = 0.1f;
+        movementDirection = "Right";
+        playedChomp1 = false;
     }
 
     void Update()
     {
         HandleMovementInput();
+
         if (CheckCanMoveMoving(movementDirection))
         {
             Move();
         }
+
         AnimateSprite();
     }
 
@@ -213,18 +217,25 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.tag.Equals("Ghosts"))
         {
-            Destroy(this);
+            if (poweredUp)
+            {
+
+            }
+            else
+            {
+                Destroy(this);
+            }
         }
     }
 
     public void PlayEatSound()
     {
-        if (playedChomp1)
+        if (playedChomp1 && chomp2 != null)
         {
             audioSource.PlayOneShot(chomp2);
             playedChomp1 = false;
         }
-        else
+        else if (!playedChomp1 && chomp1 != null)
         {
             audioSource.PlayOneShot(chomp1);
             playedChomp1 = true;

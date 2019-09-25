@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    [SerializeField] private Vector3 teleportToPoint;
+    [SerializeField] private static Vector3 teleportToPoint = new Vector3(0, 0, 0);
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
