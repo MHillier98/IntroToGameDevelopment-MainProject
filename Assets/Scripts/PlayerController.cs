@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int startingScore = 0;
     [SerializeField] private int currentScore = 0;
 
-    [SerializeField] private int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
-    [SerializeField] private int largeDotScore = 50;
+    [SerializeField] private static int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
+    [SerializeField] private static int largeDotScore = 50;
 
     [SerializeField] private bool poweredUp = false;
     [SerializeField] private int poweredUpTimeMax = 6;
@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip chomp2;
     [SerializeField] private bool playedChomp1 = false;
 
+    [SerializeField] private GameObject particleObject;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
 
         //audioSource.clip = Resources.Load<AudioClip>("Audio/Chomp");
 
+        movementDirection = "Right";
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
     }
@@ -40,7 +43,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMovementInput();
-        if (CheckCanMove(movementDirection))
+        if (CheckCanMoveMoving(movementDirection))
         {
             Move();
         }
@@ -51,26 +54,36 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            movementDirection = "Right";
-
+            if (CheckCanMove("Right"))
+            {
+                movementDirection = "Right";
+                Debug.Log("Can Move : " + movementDirection);
+            }
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            movementDirection = "Left";
-
+            if (CheckCanMove("Left"))
+            {
+                movementDirection = "Left";
+                Debug.Log("Can Move : " + movementDirection);
+            }
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            movementDirection = "Up";
-
+            if (CheckCanMove("Up"))
+            {
+                movementDirection = "Up";
+                Debug.Log("Can Move : " + movementDirection);
+            }
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            movementDirection = "Down";
-
+            if (CheckCanMove("Down"))
+            {
+                movementDirection = "Down";
+                Debug.Log("Can Move : " + movementDirection);
+            }
         }
-
-        Debug.Log(movementDirection);
     }
 
     private bool CheckCanMove(string direction)
@@ -93,10 +106,21 @@ public class PlayerController : MonoBehaviour
             default: break;
         }
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDir, 1f);
-        Debug.DrawRay(transform.position, rayDir, Color.red);
+        float checkDistance = 1.1f;
+        float rayOffset = 0.87f;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up * rayOffset, rayDir, checkDistance);
+        Debug.DrawRay(transform.position + transform.up * rayOffset, rayDir * checkDistance, Color.red);
 
         if (hit.collider != null && hit.collider.tag != null && hit.collider.tag == "Walls")
+        {
+            return false;
+        }
+
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position + transform.up * -rayOffset, rayDir, checkDistance);
+        Debug.DrawRay(transform.position + transform.up * -rayOffset, rayDir * checkDistance, Color.yellow);
+
+        if (hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
         {
             return false;
         }
@@ -104,32 +128,46 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    void FixedUpdate()
+    private bool CheckCanMoveMoving(string direction)
     {
-        //Debug.DrawRay(transform.position, Vector3.up, Color.red);
-        //Debug.DrawRay(transform.position, Vector3.down, Color.red);
-        //Debug.DrawRay(transform.position, Vector3.left, Color.red);
-        //Debug.DrawRay(transform.position, Vector3.right, Color.red);
+        Vector3 rayDir = Vector3.zero;
+        switch (direction)
+        {
+            case "Right":
+                rayDir = Vector3.right;
+                break;
+            case "Left":
+                rayDir = Vector3.left;
+                break;
+            case "Up":
+                rayDir = Vector3.up;
+                break;
+            case "Down":
+                rayDir = Vector3.down;
+                break;
+            default: break;
+        }
 
-        //Vector3 hitDirection1 = transform.TransformDirection(new Vector3(1f, 1f));
-        //Vector3 hitDirection2 = transform.TransformDirection(new Vector3(1f, -1f));
+        float checkDistance = 1.1f;
+        float rayOffset = 0.87f;
 
-        //RaycastHit2D hit1 = Physics2D.Raycast(transform.position, hitDirection1);
-        //RaycastHit2D hit2 = Physics2D.Raycast(transform.position, hitDirection2);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up * rayOffset, rayDir, checkDistance);
+        Debug.DrawRay(transform.position + transform.up * rayOffset, rayDir * checkDistance, Color.green);
 
-        //Debug.DrawRay(transform.position, hitDirection1, Color.red);
-        //Debug.DrawRay(transform.position, hitDirection2, Color.black);
+        if (hit.collider != null && hit.collider.tag != null && hit.collider.tag == "Walls")
+        {
+            return false;
+        }
 
-        //if (hit1.collider != null && hit1.collider.tag != null && hit1.collider.tag == "Walls" && hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
-        //{
-        //    Debug.Log(hit1.collider.tag);
-        //    Debug.Log(hit2.collider.tag);
-        //    canMove = false;
-        //}
-        //else
-        //{
-        //    canMove = true;
-        //}
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position + transform.up * -rayOffset, rayDir, checkDistance);
+        Debug.DrawRay(transform.position + transform.up * -rayOffset, rayDir * checkDistance, Color.magenta);
+
+        if (hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void Move()
@@ -167,15 +205,14 @@ public class PlayerController : MonoBehaviour
         if (collision.tag.Equals("Dots"))
         {
             PlayEatSound();
-
             Destroy(collision.gameObject);
-            // collision.gameObject.SetActive(false);
             AddScore(dotScore);
         }
         else if (collision.tag.Equals("Large Dots"))
         {
+            PlayEatSound();
             Destroy(collision.gameObject);
-            // collision.gameObject.SetActive(false);
+            Instantiate(particleObject, transform.position, transform.rotation);
             AddScore(largeDotScore);
             PowerUp();
             Invoke("PowerDown", poweredUpTimeCurrent);

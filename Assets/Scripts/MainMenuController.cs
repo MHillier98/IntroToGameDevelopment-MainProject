@@ -10,6 +10,5 @@ public class MainMenuController : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
-
     }
 }

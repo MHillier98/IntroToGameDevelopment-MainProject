@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 21599463927671727}
   - component: {fileID: 4645848168642815532}
+  - component: {fileID: 1961682731772699110}
   - component: {fileID: 655123432196315092}
   m_Layer: 0
   m_Name: LargeDotParticles
@@ -94,6 +95,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &1961682731772699110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939532109335709591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729b5fa0fc92f9b4a9e7e2c4501fdc4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &655123432196315092
 ParticleSystem:
   m_ObjectHideFlags: 0
