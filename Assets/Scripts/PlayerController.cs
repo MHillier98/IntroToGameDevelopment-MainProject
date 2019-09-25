@@ -33,8 +33,6 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        //audioSource.clip = Resources.Load<AudioClip>("Audio/Chomp");
-
         movementDirection = "Right";
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
@@ -57,7 +55,6 @@ public class PlayerController : MonoBehaviour
             if (CheckCanMove("Right"))
             {
                 movementDirection = "Right";
-                Debug.Log("Can Move : " + movementDirection);
             }
         }
         else if (Input.GetAxis("Horizontal") < 0)
@@ -65,7 +62,6 @@ public class PlayerController : MonoBehaviour
             if (CheckCanMove("Left"))
             {
                 movementDirection = "Left";
-                Debug.Log("Can Move : " + movementDirection);
             }
         }
         else if (Input.GetAxis("Vertical") > 0)
@@ -73,7 +69,6 @@ public class PlayerController : MonoBehaviour
             if (CheckCanMove("Up"))
             {
                 movementDirection = "Up";
-                Debug.Log("Can Move : " + movementDirection);
             }
         }
         else if (Input.GetAxis("Vertical") < 0)
@@ -81,7 +76,6 @@ public class PlayerController : MonoBehaviour
             if (CheckCanMove("Down"))
             {
                 movementDirection = "Down";
-                Debug.Log("Can Move : " + movementDirection);
             }
         }
     }
