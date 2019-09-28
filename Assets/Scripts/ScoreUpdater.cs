@@ -8,8 +8,8 @@ public class ScoreUpdater : MonoBehaviour
     private TextMeshProUGUI scorerText;
     private PlayerController playerController;
 
-    [SerializeField] private bool isHighScorer = false;
-    [SerializeField] private int highScore = 0;
+    private bool isHighScorer = false;
+    private int highScore = 0;
 
     void Start()
     {

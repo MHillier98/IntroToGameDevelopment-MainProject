@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    [SerializeField] private static Vector3 teleportToPoint = new Vector3(0, 0, 0);
+    public Vector3 teleportToPoint;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Ms Pac-Man")
         {
-            collision.gameObject.transform.position = teleportToPoint;
+            if (teleportToPoint != null)
+            {
+                collision.gameObject.transform.position = teleportToPoint;
+            }
         }
     }
 }

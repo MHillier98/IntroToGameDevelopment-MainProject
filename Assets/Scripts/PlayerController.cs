@@ -5,27 +5,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private static SpriteRenderer spriteRenderer;
-    private static AudioSource audioSource;
+    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
 
-    [SerializeField] private static int startingScore = 0;
-    [SerializeField] private int currentScore = 0;
+    private static int startingScore = 0;
+    private int currentScore = 0;
 
-    [SerializeField] private static int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
-    [SerializeField] private static int largeDotScore = 50;
+    private static int dotScore = 10;
+    private static int largeDotScore = 50;
+    private static int ghostScore = 100;
 
-    [SerializeField] private bool poweredUp = false;
-    [SerializeField] private static int poweredUpTimeMax = 6;
-    [SerializeField] private int poweredUpTimeCurrent;
+    private int ghostsEatenCounter = 1;
 
-    [SerializeField] private static float movementSpeed = 0.1f;
-    [SerializeField] private string movementDirection = "Right";
+    private bool poweredUp = false;
+    private static int poweredUpTimeMax = 6;
+    private int poweredUpTimeCurrent;
 
-    [SerializeField] private bool playedChomp1 = false;
-    [SerializeField] public static AudioClip chomp1 = null;
-    [SerializeField] public static AudioClip chomp2 = null;
+    public float movementSpeed = 6.0f;
+    private string movementDirection = "Right";
 
-    [SerializeField] public static GameObject particleObject = null;
+    private bool playedChomp1 = false;
+    public AudioClip chomp1 = null;
+    public AudioClip chomp2 = null;
+
+    public GameObject particleObject = null;
 
     void Start()
     {
@@ -35,7 +38,6 @@ public class PlayerController : MonoBehaviour
         currentScore = startingScore;
         poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
-        movementSpeed = 0.1f;
         movementDirection = "Right";
         playedChomp1 = false;
     }
@@ -44,7 +46,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovementInput();
 
-        if (CheckCanMoveMoving(movementDirection))
+        if (CheckCanMove(movementDirection))
         {
             Move();
         }
@@ -86,81 +88,66 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckCanMove(string direction)
     {
+        float rayOffset = 0.87f;
+        float rayOffsetX = 0.0f;
+        float rayOffsetY = 0.0f;
+        float checkDistance = 1.1f;
         Vector3 rayDir = Vector3.zero;
+
         switch (direction)
         {
             case "Right":
+                rayOffsetX = 0.0f;
+                rayOffsetY = rayOffset;
                 rayDir = Vector3.right;
                 break;
+
             case "Left":
+                rayOffsetX = 0.0f;
+                rayOffsetY = rayOffset;
                 rayDir = Vector3.left;
                 break;
+
             case "Up":
+                rayOffsetX = rayOffset;
+                rayOffsetY = 0.0f;
                 rayDir = Vector3.up;
                 break;
+
             case "Down":
+                rayOffsetX = rayOffset;
+                rayOffsetY = 0.0f;
                 rayDir = Vector3.down;
                 break;
-            default: break;
+
+            default: // this should never happen as direction should always be set
+                return false;
         }
 
-        float checkDistance = 1.1f;
-        float rayOffset = 0.87f;
+        Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
+        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up * rayOffset, rayDir, checkDistance);
-        Debug.DrawRay(transform.position + transform.up * rayOffset, rayDir * checkDistance, Color.red);
+        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
+        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
 
-        if (hit.collider != null && hit.collider.tag != null && hit.collider.tag == "Walls")
+        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
+        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
+
+
+        if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.tag == "Walls")
         {
             return false;
         }
 
-        RaycastHit2D hit2 = Physics2D.Raycast(transform.position + transform.up * -rayOffset, rayDir, checkDistance);
-        Debug.DrawRay(transform.position + transform.up * -rayOffset, rayDir * checkDistance, Color.yellow);
-
-        if (hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
+        if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.tag == "Walls")
         {
             return false;
         }
 
-        return true;
-    }
-
-    private bool CheckCanMoveMoving(string direction)
-    {
-        Vector3 rayDir = Vector3.zero;
-        switch (direction)
-        {
-            case "Right":
-                rayDir = Vector3.right;
-                break;
-            case "Left":
-                rayDir = Vector3.left;
-                break;
-            case "Up":
-                rayDir = Vector3.up;
-                break;
-            case "Down":
-                rayDir = Vector3.down;
-                break;
-            default: break;
-        }
-
-        float checkDistance = 1.1f;
-        float rayOffset = 0.87f;
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up * rayOffset, rayDir, checkDistance);
-        Debug.DrawRay(transform.position + transform.up * rayOffset, rayDir * checkDistance, Color.green);
-
-        if (hit.collider != null && hit.collider.tag != null && hit.collider.tag == "Walls")
-        {
-            return false;
-        }
-
-        RaycastHit2D hit2 = Physics2D.Raycast(transform.position + transform.up * -rayOffset, rayDir, checkDistance);
-        Debug.DrawRay(transform.position + transform.up * -rayOffset, rayDir * checkDistance, Color.magenta);
-
-        if (hit2.collider != null && hit2.collider.tag != null && hit2.collider.tag == "Walls")
+        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
         {
             return false;
         }
@@ -180,15 +167,15 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipY = false;
             transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        else if (movementDirection.Equals("Left"))
-        {
-            spriteRenderer.flipY = true;
-            transform.eulerAngles = new Vector3(0, 0, 180);
-        }
         else if (movementDirection.Equals("Up"))
         {
             spriteRenderer.flipY = false;
             transform.eulerAngles = new Vector3(0, 0, 90);
+        }
+        else if (movementDirection.Equals("Left"))
+        {
+            spriteRenderer.flipY = true;
+            transform.eulerAngles = new Vector3(0, 0, 180);
         }
         else if (movementDirection.Equals("Down"))
         {
@@ -199,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // i could set the dots to not be active, if i want to reactivate them for new levels
+        // could set the dots to not be active, if i want to reactivate them for new levels
         if (collision.tag.Equals("Dots"))
         {
             PlayEatSound();
@@ -208,9 +195,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.tag.Equals("Large Dots"))
         {
+            if (particleObject != null)
+            {
+                Instantiate(particleObject, transform.position, transform.rotation);
+            }
+
             PlayEatSound();
             Destroy(collision.gameObject);
-            Instantiate(particleObject, transform.position, transform.rotation);
             AddScore(largeDotScore);
             PowerUp();
             Invoke("PowerDown", poweredUpTimeCurrent);
@@ -219,7 +210,9 @@ public class PlayerController : MonoBehaviour
         {
             if (poweredUp)
             {
-
+                Destroy(collision.gameObject);
+                AddScore(ghostScore * ghostsEatenCounter);
+                ghostsEatenCounter += 1;
             }
             else
             {
@@ -270,5 +263,6 @@ public class PlayerController : MonoBehaviour
     public void PowerDown()
     {
         poweredUp = false;
+        ghostsEatenCounter = 1;
     }
 }
