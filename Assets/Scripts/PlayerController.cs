@@ -8,42 +8,49 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
-    public int startingScore = 0;
-    private int score = 0;
+    private static int startingScore = 0;
+    private int currentScore = 0;
 
-    public int dotScore = 10; // maybe move this to be on the dot itself, and get from it?
-    public int largeDotScore = 50;
+    private static int dotScore = 10;
+    private static int largeDotScore = 50;
+    private static int ghostScore = 100;
 
-    public bool poweredUp = false;
-    public int poweredUpTimeMax = 6;
-    public int poweredUpTimeCurrent;
+    private int ghostsEatenCounter = 1;
 
-    public bool isMoving = true;
-    public float movementSpeed = 0.1f;
-    public string movementDirection = "Right";
+    private bool poweredUp = false;
+    private static int poweredUpTimeMax = 6;
+    private int poweredUpTimeCurrent;
 
-    public AudioClip chomp1;
-    public AudioClip chomp2;
+    public float movementSpeed = 6.0f;
+    private string movementDirection = "Right";
+
     private bool playedChomp1 = false;
+    public AudioClip chomp1 = null;
+    public AudioClip chomp2 = null;
+
+    public GameObject particleObject = null;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        //audioSource.clip = Resources.Load<AudioClip>("Audio/Chomp");
-
-        score = startingScore;
+        currentScore = startingScore;
+        poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
+        movementDirection = "Right";
+        playedChomp1 = false;
     }
 
     void Update()
     {
         HandleMovementInput();
-        if (isMoving)
+
+        if (CheckCanMove(movementDirection))
         {
             Move();
         }
+
         AnimateSprite();
     }
 
@@ -51,20 +58,101 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            movementDirection = "Right";
+            if (CheckCanMove("Right"))
+            {
+                movementDirection = "Right";
+            }
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            movementDirection = "Left";
+            if (CheckCanMove("Left"))
+            {
+                movementDirection = "Left";
+            }
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            movementDirection = "Up";
+            if (CheckCanMove("Up"))
+            {
+                movementDirection = "Up";
+            }
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            movementDirection = "Down";
+            if (CheckCanMove("Down"))
+            {
+                movementDirection = "Down";
+            }
         }
+    }
+
+    private bool CheckCanMove(string direction)
+    {
+        float rayOffset = 0.87f;
+        float rayOffsetX = 0.0f;
+        float rayOffsetY = 0.0f;
+        float checkDistance = 1.1f;
+        Vector3 rayDir = Vector3.zero;
+
+        switch (direction)
+        {
+            case "Right":
+                rayOffsetX = 0.0f;
+                rayOffsetY = rayOffset;
+                rayDir = Vector3.right;
+                break;
+
+            case "Left":
+                rayOffsetX = 0.0f;
+                rayOffsetY = rayOffset;
+                rayDir = Vector3.left;
+                break;
+
+            case "Up":
+                rayOffsetX = rayOffset;
+                rayOffsetY = 0.0f;
+                rayDir = Vector3.up;
+                break;
+
+            case "Down":
+                rayOffsetX = rayOffset;
+                rayOffsetY = 0.0f;
+                rayDir = Vector3.down;
+                break;
+
+            default: // this should never happen as direction should always be set
+                return false;
+        }
+
+        Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
+        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
+
+        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
+        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
+
+        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
+        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.red);
+        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
+
+
+        if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.tag == "Walls")
+        {
+            return false;
+        }
+
+        if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.tag == "Walls")
+        {
+            return false;
+        }
+
+        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void Move()
@@ -79,15 +167,15 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipY = false;
             transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        else if (movementDirection.Equals("Left"))
-        {
-            spriteRenderer.flipY = true;
-            transform.eulerAngles = new Vector3(0, 0, 180);
-        }
         else if (movementDirection.Equals("Up"))
         {
             spriteRenderer.flipY = false;
             transform.eulerAngles = new Vector3(0, 0, 90);
+        }
+        else if (movementDirection.Equals("Left"))
+        {
+            spriteRenderer.flipY = true;
+            transform.eulerAngles = new Vector3(0, 0, 180);
         }
         else if (movementDirection.Equals("Down"))
         {
@@ -98,37 +186,49 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // i could set the dots to not be active, if i want to reactivate them for new levels
+        // could set the dots to not be active, if i want to reactivate them for new levels
         if (collision.tag.Equals("Dots"))
         {
             PlayEatSound();
-
             Destroy(collision.gameObject);
-            // collision.gameObject.SetActive(false);
             AddScore(dotScore);
         }
         else if (collision.tag.Equals("Large Dots"))
         {
+            if (particleObject != null)
+            {
+                Instantiate(particleObject, transform.position, transform.rotation);
+            }
+
+            PlayEatSound();
             Destroy(collision.gameObject);
-            // collision.gameObject.SetActive(false);
             AddScore(largeDotScore);
             PowerUp();
             Invoke("PowerDown", poweredUpTimeCurrent);
         }
         else if (collision.tag.Equals("Ghosts"))
         {
-            Destroy(this);
+            if (poweredUp)
+            {
+                Destroy(collision.gameObject);
+                AddScore(ghostScore * ghostsEatenCounter);
+                ghostsEatenCounter += 1;
+            }
+            else
+            {
+                Destroy(this);
+            }
         }
     }
 
     public void PlayEatSound()
     {
-        if (playedChomp1)
+        if (playedChomp1 && chomp2 != null)
         {
             audioSource.PlayOneShot(chomp2);
             playedChomp1 = false;
         }
-        else
+        else if (!playedChomp1 && chomp1 != null)
         {
             audioSource.PlayOneShot(chomp1);
             playedChomp1 = true;
@@ -137,22 +237,22 @@ public class PlayerController : MonoBehaviour
 
     public void SetScore(int newScore)
     {
-        score = newScore;
+        currentScore = newScore;
     }
 
     public void AddScore(int addScore)
     {
-        score += addScore;
+        currentScore += addScore;
     }
 
     public void IncrementScore()
     {
-        score += 1;
+        currentScore += 1;
     }
 
     public int GetScore()
     {
-        return score;
+        return currentScore;
     }
 
     public void PowerUp()
@@ -163,5 +263,6 @@ public class PlayerController : MonoBehaviour
     public void PowerDown()
     {
         poweredUp = false;
+        ghostsEatenCounter = 1;
     }
 }
