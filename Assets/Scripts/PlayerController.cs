@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject particleObject = null;
 
+    private bool canMove = true;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -42,16 +44,21 @@ public class PlayerController : MonoBehaviour
         playedChomp1 = false;
     }
 
-    void Update()
+    private void Update()
     {
         HandleMovementInput();
 
-        if (CheckCanMove(movementDirection))
+        if (canMove)
         {
             Move();
         }
 
         AnimateSprite();
+    }
+
+    private void FixedUpdate()
+    {
+        canMove = CheckCanMove(movementDirection);
     }
 
     private void HandleMovementInput()
@@ -88,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckCanMove(string direction)
     {
-        float rayOffset = 0.87f;
+        float rayOffset = 0.9f;
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
         float checkDistance = 1.1f;
@@ -129,11 +136,11 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
 
         Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
-        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.red);
+        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
         RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
 
         Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
-        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.red);
+        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
 
 
@@ -186,6 +193,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(collision.tag);
         // could set the dots to not be active, if i want to reactivate them for new levels
         if (collision.tag.Equals("Dots"))
         {
@@ -216,7 +224,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Destroy(this);
+                Destroy(this.gameObject);
             }
         }
     }
