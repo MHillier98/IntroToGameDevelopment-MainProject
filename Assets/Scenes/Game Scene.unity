@@ -118,38 +118,6 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 450073885138270632}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1005521231 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5905008786000379595, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
-    type: 3}
-  m_PrefabInstance: {fileID: 5905008784619564265}
-  m_PrefabAsset: {fileID: 0}
---- !u!61 &1005521235
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005521231}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
-    newSize: {x: 2, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2}
-  m_EdgeRadius: 0
 --- !u!1001 &240189216643376733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,46 +323,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7530460532701977986, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.x
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530460532701977986, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.y
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037081749975653, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.x
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037081749975653, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.y
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037082383231510, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.x
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037082383231510, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.y
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037080777693316, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.x
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583037080777693316, guid: ca0062eaa1661224fbf542c2bca427bc,
-        type: 3}
-      propertyPath: teleportToPoint.y
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca0062eaa1661224fbf542c2bca427bc, type: 3}
 --- !u!1001 &4324163019968828281
@@ -408,11 +336,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Game Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 4324163021225064575, guid: 336270f8a2179ab4390e4afccd8f3a97,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4324163021225064560, guid: 336270f8a2179ab4390e4afccd8f3a97,
         type: 3}
@@ -585,6 +508,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4403822621839253137, guid: 01efa70f0b783eb4fb9ff965c84517e4,
         type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403822621839253137, guid: 01efa70f0b783eb4fb9ff965c84517e4,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
@@ -627,27 +555,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4403822621839253143, guid: 01efa70f0b783eb4fb9ff965c84517e4,
-        type: 3}
-      propertyPath: chomp1
-      value: 
-      objectReference: {fileID: 8300000, guid: aeb3af9e71a40cc43bdc53d21abfc4cf, type: 3}
-    - target: {fileID: 4403822621839253143, guid: 01efa70f0b783eb4fb9ff965c84517e4,
-        type: 3}
-      propertyPath: chomp2
-      value: 
-      objectReference: {fileID: 8300000, guid: 83449bce7585e864fb564a9e5e49d448, type: 3}
-    - target: {fileID: 4403822621839253143, guid: 01efa70f0b783eb4fb9ff965c84517e4,
-        type: 3}
-      propertyPath: particleObject
-      value: 
-      objectReference: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
-        type: 3}
-    - target: {fileID: 4403822621839253143, guid: 01efa70f0b783eb4fb9ff965c84517e4,
-        type: 3}
-      propertyPath: movementSpeed
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01efa70f0b783eb4fb9ff965c84517e4, type: 3}
@@ -1131,11 +1038,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8325546008360838465, guid: 364c639df506a574fb5ca4dda96a74d3,
-        type: 3}
-      propertyPath: m_ColliderPaths.Array.size
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 364c639df506a574fb5ca4dda96a74d3, type: 3}

@@ -132,15 +132,15 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
-        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
+        Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
 
         Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
-        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
+        Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
         RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
 
         Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
-        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
+        Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
 
 
@@ -172,22 +172,22 @@ public class PlayerController : MonoBehaviour
         if (movementDirection.Equals("Right"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
         }
         else if (movementDirection.Equals("Up"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
         }
         else if (movementDirection.Equals("Left"))
         {
             spriteRenderer.flipY = true;
-            transform.eulerAngles = new Vector3(0, 0, 180);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
         }
         else if (movementDirection.Equals("Down"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 270);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
         }
     }
 
