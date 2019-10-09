@@ -777,6 +777,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Red Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 5905008786000379595, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5905008786000379597, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
         type: 3}
       propertyPath: m_LocalPosition.x
