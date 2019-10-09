@@ -199,6 +199,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 450073884640477655, guid: 560e43abdf7e8034085a229d484b2b75,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 450073884640477655, guid: 560e43abdf7e8034085a229d484b2b75,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.6392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 450073884640477655, guid: 560e43abdf7e8034085a229d484b2b75,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 450073884640477655, guid: 560e43abdf7e8034085a229d484b2b75,
+        type: 3}
+      propertyPath: orthographic size
+      value: 19.5
+      objectReference: {fileID: 0}
     - target: {fileID: 450073884640477480, guid: 560e43abdf7e8034085a229d484b2b75,
         type: 3}
       propertyPath: m_LocalPosition.x
