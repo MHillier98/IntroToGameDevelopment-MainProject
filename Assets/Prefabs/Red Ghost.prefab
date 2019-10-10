@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5905008786000379594}
   - component: {fileID: 5905008786000379596}
   - component: {fileID: 1005521235}
+  - component: {fileID: 361736948}
+  - component: {fileID: 361736944}
   m_Layer: 8
   m_Name: Red Ghost
   m_TagString: Ghosts
@@ -126,3 +128,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &361736948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905008786000379595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b9f39091b5a244c9c591d1d281f859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetPosition: {fileID: 0}
+  movementSpeed: 5
+  movementDirection: Right
+--- !u!114 &361736944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905008786000379595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a769e93b945f5246b39041144ba9563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 131072
+  worldSize: {x: 28, y: 31}
+  nodeRadius: 0.5
+  distanceBetweenNodes: 0.5

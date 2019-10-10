@@ -39,8 +39,10 @@ public class PlayerController : MonoBehaviour
 
         transform.position = startingPosition;
         currentScore = startingScore;
-        poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
+
+        poweredUp = false;
+        movementSpeed = 6.0f;
         movementDirection = "Right";
         playedChomp1 = false;
     }

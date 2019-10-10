@@ -5,25 +5,30 @@ using UnityEngine;
 public class GhostController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private AudioSource audioSource;
+    private NodeGrid nodeGridReference;
 
+    public Transform TargetPosition; // position to pathfind to
     public float movementSpeed = 5.6f;
     public string movementDirection = "Right";
+
+    private void Awake()
+    {
+        nodeGridReference = GetComponent<NodeGrid>();
+    }
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>();
 
+        movementSpeed = 5.6f;
         movementDirection = "Right";
     }
 
     private void Update()
     {
-        //HandleMovementInput();
         HandlePathfinding();
+        //HandleMovementInput();
         AnimateSprite();
-
         if (CheckCanMove(movementDirection))
         {
             Move();
@@ -32,7 +37,37 @@ public class GhostController : MonoBehaviour
 
     private void HandlePathfinding()
     {
+        FindPath(transform.position, TargetPosition.position);
+        
+        Vector3 nextNode = nodeGridReference.FinalPath[0].worldPos;
+        Debug.Log(nextNode);
 
+        //if (Vector3.Distance(transform.position, nextNode) > 0.05f)
+        //{
+
+        //}
+        //else
+        //{
+
+        //}
+
+        if (nextNode.x > transform.position.x)
+        {
+            movementDirection = "Right";
+        }
+        else if (nextNode.x < transform.position.x)
+        {
+            movementDirection = "Left";
+        }
+
+        if (nextNode.y > transform.position.y)
+        {
+            movementDirection = "Up";
+        }
+        else if (nextNode.y < transform.position.y)
+        {
+            movementDirection = "Down";
+        }
     }
 
     private void HandleMovementInput()
@@ -162,5 +197,92 @@ public class GhostController : MonoBehaviour
             spriteRenderer.flipY = false;
             transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
         }
+    }
+    
+
+
+    /*
+     * Find the path to a target through the array of nodes
+     * 
+     * Resources used:
+     *   https://en.wikipedia.org/wiki/A*_search_algorithm
+     *   https://www.youtube.com/watch?v=ySN5Wnu88nE
+     *   https://www.geeksforgeeks.org/a-search-algorithm/
+     */
+    private void FindPath(Vector3 startPos, Vector3 targetPos)
+    {
+        PathNode startNode = nodeGridReference.NodeFromWorldPoint(startPos); // find the node closest to the starting position
+        PathNode targetNode = nodeGridReference.NodeFromWorldPoint(targetPos); // find the node closest to the target position
+
+        List<PathNode> openList = new List<PathNode>(); // a list of nodes still to search
+        HashSet<PathNode> closedList = new HashSet<PathNode>(); // hashset of nodes of searched nodes
+
+        openList.Add(startNode);
+
+        while (openList.Count > 0)
+        {
+            PathNode currentNode = openList[0];
+            for (int i = 1; i < openList.Count; i++)
+            {
+                if (openList[i].totalCost < currentNode.totalCost || openList[i].totalCost == currentNode.totalCost && openList[i].distanceCost < currentNode.distanceCost)
+                {
+                    currentNode = openList[i];
+                }
+            }
+
+            openList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            if (currentNode == targetNode)
+            {
+                GetFinalPath(startNode, targetNode);
+                break;
+            }
+
+            foreach (PathNode neighbourNode in nodeGridReference.GetNeighbouringNodes(currentNode))
+            {
+                if (!neighbourNode.isWall || closedList.Contains(neighbourNode))
+                {
+                    continue;
+                }
+
+                int moveCost = currentNode.movementCost + GetDistance(currentNode, neighbourNode);
+
+                if (!openList.Contains(neighbourNode) || moveCost < neighbourNode.totalCost)
+                {
+                    neighbourNode.movementCost = moveCost;
+                    neighbourNode.distanceCost = GetDistance(neighbourNode, targetNode);
+                    neighbourNode.parentNode = currentNode;
+
+                    if (!openList.Contains(neighbourNode))
+                    {
+                        openList.Add(neighbourNode);
+                    }
+                }
+            }
+        }
+    }
+
+    private void GetFinalPath(PathNode startingNode, PathNode endNode)
+    {
+        List<PathNode> finalPath = new List<PathNode>();
+        PathNode currentNode = endNode;
+
+        while (currentNode != startingNode)
+        {
+            finalPath.Add(currentNode);
+            currentNode = currentNode.parentNode;
+        }
+
+        finalPath.Reverse();
+        nodeGridReference.FinalPath = finalPath;
+    }
+
+    private int GetDistance(PathNode nodeA, PathNode nodeB)
+    {
+        int distX = Mathf.Abs(nodeA.arrayPosX - nodeB.arrayPosX);
+        int distY = Mathf.Abs(nodeA.arrayPosY - nodeB.arrayPosY);
+
+        return distX + distY;
     }
 }
