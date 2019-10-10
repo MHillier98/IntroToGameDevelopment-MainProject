@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
+    public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
+
     private static int startingScore = 0;
     private int currentScore = 0;
 
@@ -30,11 +32,14 @@ public class PlayerController : MonoBehaviour
 
     public GameObject particleObject = null;
 
+    private bool canMove = true;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
+        transform.position = startingPosition;
         currentScore = startingScore;
         poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
@@ -42,16 +47,15 @@ public class PlayerController : MonoBehaviour
         playedChomp1 = false;
     }
 
-    void Update()
+    private void Update()
     {
         HandleMovementInput();
+        AnimateSprite();
 
         if (CheckCanMove(movementDirection))
         {
             Move();
         }
-
-        AnimateSprite();
     }
 
     private void HandleMovementInput()
@@ -88,11 +92,11 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckCanMove(string direction)
     {
-        float rayOffset = 0.87f;
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
-        float checkDistance = 1.1f;
+        float rayOffset = 0.9f;
         Vector3 rayDir = Vector3.zero;
+        float checkDistance = 1.1f;
 
         switch (direction)
         {
@@ -125,27 +129,26 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
-        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
-
-        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
-        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.red);
-        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
-
-        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
-        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.red);
-        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
-
+        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
 
         if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.tag == "Walls")
         {
             return false;
         }
 
+        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
+        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
+        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
+
         if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.tag == "Walls")
         {
             return false;
         }
+
+        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
+        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
+        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
 
         if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
         {
@@ -165,28 +168,27 @@ public class PlayerController : MonoBehaviour
         if (movementDirection.Equals("Right"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
         }
         else if (movementDirection.Equals("Up"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
         }
         else if (movementDirection.Equals("Left"))
         {
             spriteRenderer.flipY = true;
-            transform.eulerAngles = new Vector3(0, 0, 180);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
         }
         else if (movementDirection.Equals("Down"))
         {
             spriteRenderer.flipY = false;
-            transform.eulerAngles = new Vector3(0, 0, 270);
+            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // could set the dots to not be active, if i want to reactivate them for new levels
         if (collision.tag.Equals("Dots"))
         {
             PlayEatSound();
@@ -216,7 +218,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Destroy(this);
+                transform.position = startingPosition;
             }
         }
     }

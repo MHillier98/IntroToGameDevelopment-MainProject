@@ -337,8 +337,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23b4ad799dcf3344a16a9e5a73b3a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHighScorer: 0
-  highScore: 0
 --- !u!1 &4324163019891282555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,8 +998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23b4ad799dcf3344a16a9e5a73b3a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHighScorer: 1
-  highScore: 0
 --- !u!1 &4324163021225064575
 GameObject:
   m_ObjectHideFlags: 0
