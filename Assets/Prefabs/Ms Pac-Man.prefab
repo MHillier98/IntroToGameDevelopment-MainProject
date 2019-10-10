@@ -115,17 +115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d90df33bfad60f4384dd5f0f7753b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingScore: 0
-  currentScore: 0
-  poweredUp: 0
-  poweredUpTimeMax: 6
-  poweredUpTimeCurrent: 0
-  canMove: 1
   movementSpeed: 6
-  movementDirection: Right
   chomp1: {fileID: 8300000, guid: aeb3af9e71a40cc43bdc53d21abfc4cf, type: 3}
   chomp2: {fileID: 8300000, guid: 83449bce7585e864fb564a9e5e49d448, type: 3}
-  playedChomp1: 0
   particleObject: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
     type: 3}
 --- !u!50 &4403822621839253141
@@ -146,7 +138,7 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &4403822621839253140
