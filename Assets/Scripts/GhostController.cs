@@ -1,59 +1,38 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class GhostController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
-    public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
-
-    private static int startingScore = 0;
-    private int currentScore = 0;
-
-    private static int dotScore = 10;
-    private static int largeDotScore = 50;
-    private static int ghostScore = 100;
-
-    private int ghostsEatenCounter = 1;
-
-    private bool poweredUp = false;
-    private static int poweredUpTimeMax = 6;
-    private int poweredUpTimeCurrent;
-
-    public float movementSpeed = 6.0f;
+    public float movementSpeed = 5.6f;
     public string movementDirection = "Right";
-
-    private bool playedChomp1 = false;
-    public AudioClip chomp1 = null;
-    public AudioClip chomp2 = null;
-
-    public GameObject particleObject = null;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        transform.position = startingPosition;
-        currentScore = startingScore;
-        poweredUp = false;
-        poweredUpTimeCurrent = poweredUpTimeMax;
         movementDirection = "Right";
-        playedChomp1 = false;
     }
 
     private void Update()
     {
-        HandleMovementInput();
+        //HandleMovementInput();
+        HandlePathfinding();
         AnimateSprite();
 
         if (CheckCanMove(movementDirection))
         {
             Move();
         }
+    }
+
+    private void HandlePathfinding()
+    {
+
     }
 
     private void HandleMovementInput()
@@ -183,86 +162,5 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipY = false;
             transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag.Equals("Dots"))
-        {
-            PlayEatSound();
-            Destroy(collision.gameObject);
-            AddScore(dotScore);
-        }
-        else if (collision.tag.Equals("Large Dots"))
-        {
-            if (particleObject != null)
-            {
-                Instantiate(particleObject, transform.position, transform.rotation);
-            }
-
-            PlayEatSound();
-            Destroy(collision.gameObject);
-            AddScore(largeDotScore);
-            PowerUp();
-            Invoke("PowerDown", poweredUpTimeCurrent);
-        }
-        else if (collision.tag.Equals("Ghosts"))
-        {
-            if (poweredUp)
-            {
-                Destroy(collision.gameObject);
-                AddScore(ghostScore * ghostsEatenCounter);
-                ghostsEatenCounter += 1;
-            }
-            else
-            {
-                transform.position = startingPosition;
-            }
-        }
-    }
-
-    public void PlayEatSound()
-    {
-        if (playedChomp1 && chomp2 != null)
-        {
-            audioSource.PlayOneShot(chomp2);
-            playedChomp1 = false;
-        }
-        else if (!playedChomp1 && chomp1 != null)
-        {
-            audioSource.PlayOneShot(chomp1);
-            playedChomp1 = true;
-        }
-    }
-
-    public void SetScore(int newScore)
-    {
-        currentScore = newScore;
-    }
-
-    public void AddScore(int addScore)
-    {
-        currentScore += addScore;
-    }
-
-    public void IncrementScore()
-    {
-        currentScore += 1;
-    }
-
-    public int GetScore()
-    {
-        return currentScore;
-    }
-
-    public void PowerUp()
-    {
-        poweredUp = true;
-    }
-
-    public void PowerDown()
-    {
-        poweredUp = false;
-        ghostsEatenCounter = 1;
     }
 }
