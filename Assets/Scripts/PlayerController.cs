@@ -50,12 +50,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleMovementInput();
+        AnimateSprite();
+
         if (CheckCanMove(movementDirection))
         {
             Move();
         }
-
-        AnimateSprite();
     }
 
     //private void FixedUpdate()
@@ -134,15 +134,15 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
-        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
+        Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
 
         Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
-        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
+        Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
         RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
 
         Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
-        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
+        Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
 
 
