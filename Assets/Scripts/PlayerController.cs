@@ -58,11 +58,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //private void FixedUpdate()
-    //{
-    //    canMove = CheckCanMove(movementDirection);
-    //}
-
     private void HandleMovementInput()
     {
         if (Input.GetAxis("Horizontal") > 0)
@@ -97,11 +92,11 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckCanMove(string direction)
     {
-        float rayOffset = 0.9f;
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
-        float checkDistance = 1.1f;
+        float rayOffset = 0.9f;
         Vector3 rayDir = Vector3.zero;
+        float checkDistance = 1.1f;
 
         switch (direction)
         {
@@ -134,27 +129,26 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector2 vectorOffsetLeft = new Vector2(transform.position.x - rayOffsetX, transform.position.y - rayOffsetY);
-        Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
-
-        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
-        Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
-        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
-
-        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
-        Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
-        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
-
+        //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
 
         if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.tag == "Walls")
         {
             return false;
         }
 
+        Vector2 vectorOffsetMiddle = new Vector2(transform.position.x, transform.position.y);
+        RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
+        //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
+
         if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.tag == "Walls")
         {
             return false;
         }
+
+        Vector2 vectorOffsetRight = new Vector2(transform.position.x + rayOffsetX, transform.position.y + rayOffsetY);
+        RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
+        //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
 
         if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
         {
@@ -195,8 +189,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // could set the dots to not be active, if i want to reactivate them for new levels
-
         if (collision.tag.Equals("Dots"))
         {
             PlayEatSound();
@@ -227,7 +219,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 transform.position = startingPosition;
-                //Destroy(this.gameObject);
             }
         }
     }
