@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour
@@ -40,16 +41,71 @@ public class GhostController : MonoBehaviour
         switch (pathfindingType)
         {
             case PathfindingTypes.Random:
+                MoveRandomly();
                 break;
+
             case PathfindingTypes.Clockwise:
+                MoveClockwise();
                 break;
+
             case PathfindingTypes.Run:
+                RunFromPlayer();
                 break;
+
             case PathfindingTypes.Follow:
                 FollowPlayer();
                 break;
+
             default: return;
         }
+    }
+
+    List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
+
+    private void MoveRandomly()
+    {
+        List<MovementDirections> canMoveDirs = new List<MovementDirections>();
+
+        if (CheckCanMove(MovementDirections.Up))
+        {
+            canMoveDirs.Add(MovementDirections.Up);
+        }
+
+        if (CheckCanMove(MovementDirections.Down))
+        {
+            canMoveDirs.Add(MovementDirections.Down);
+        }
+
+        if (CheckCanMove(MovementDirections.Left))
+        {
+            canMoveDirs.Add(MovementDirections.Left);
+        }
+
+        if (CheckCanMove(MovementDirections.Right))
+        {
+            canMoveDirs.Add(MovementDirections.Right);
+        }
+
+        if (!lastCanMoveDirs.SequenceEqual(canMoveDirs))
+        {
+            if (canMoveDirs.Count > 1)
+            {
+                int maxNum = canMoveDirs.Count ;
+                int randNum = (int)UnityEngine.Random.Range(0f, (float)maxNum);
+                movementDirection = canMoveDirs[randNum];
+                lastCanMoveDirs = canMoveDirs;
+            }
+        }
+    }
+
+    private void MoveClockwise()
+    {
+
+    }
+
+    private void RunFromPlayer()
+    {
+
     }
 
     private void FollowPlayer()
