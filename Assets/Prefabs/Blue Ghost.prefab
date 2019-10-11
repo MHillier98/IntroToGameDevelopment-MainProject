@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5141553797590013831}
   - component: {fileID: 5141553797590013829}
   - component: {fileID: 377641191180366622}
+  - component: {fileID: 1068319510}
+  - component: {fileID: 1068319511}
   m_Layer: 8
   m_Name: Blue Ghost
   m_TagString: Ghosts
@@ -126,3 +128,40 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.75, y: 1.75}
   m_EdgeRadius: 0
+--- !u!114 &1068319510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5141553797590013830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a769e93b945f5246b39041144ba9563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 131072
+  worldSize: {x: 28, y: 31}
+  nodeRadius: 0.5
+  distanceBetweenNodes: 0.5
+  debugPath: 1
+  debugFullGrid: 0
+--- !u!114 &1068319511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5141553797590013830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b9f39091b5a244c9c591d1d281f859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementDirection: 3
+  pathfindingType: 2
+  playerPosition: {fileID: 0}
+  targetPositions: []
+  movementSpeed: 5.5

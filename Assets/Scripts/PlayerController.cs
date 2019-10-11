@@ -13,13 +13,13 @@ public class PlayerController : MonoBehaviour
 
     private static int poweredUpTimeMax = 6;
     private int poweredUpTimeCurrent;
-    
+
     public enum MovementDirections { Up, Down, Left, Right };
     public MovementDirections movementDirection = MovementDirections.Right;
-    
+
     public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
     public float movementSpeed = 6.0f;
-    
+
     public AudioClip chompSound1 = null;
     public AudioClip chompSound2 = null;
     private bool playedChomp1 = false;
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private static int ghostScore = 100;
 
     private int ghostsEatenCounter = 1;
-    
+
     public GameObject dotParticleObject = null;
 
     private void Start()
@@ -89,6 +89,35 @@ public class PlayerController : MonoBehaviour
             {
                 movementDirection = MovementDirections.Down;
             }
+        }
+    }
+
+    private void AnimateSprite()
+    {
+        switch (movementDirection)
+        {
+            case MovementDirections.Right:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
+                break;
+
+            case MovementDirections.Up:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
+                break;
+
+            case MovementDirections.Left:
+                spriteRenderer.flipY = true;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
+                break;
+
+            case MovementDirections.Down:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+                break;
+
+            default:
+                return;
         }
     }
 
@@ -163,35 +192,6 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
-    }
-
-    private void AnimateSprite()
-    {
-        switch (movementDirection)
-        {
-            case MovementDirections.Right:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-                break;
-
-            case MovementDirections.Up:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
-                break;
-
-            case MovementDirections.Left:
-                spriteRenderer.flipY = true;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
-                break;
-
-            case MovementDirections.Down:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
-                break;
-
-            default:
-                return;
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

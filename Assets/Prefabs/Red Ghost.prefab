@@ -140,11 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b9f39091b5a244c9c591d1d281f859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPositions: []
-  playerPosition: {fileID: 0}
-  movementSpeed: 5.5
   movementDirection: 3
   pathfindingType: 3
+  playerPosition: {fileID: 0}
+  targetPositions: []
+  movementSpeed: 5.5
 --- !u!114 &361736944
 MonoBehaviour:
   m_ObjectHideFlags: 0

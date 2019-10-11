@@ -66,7 +66,7 @@ public class GhostController : MonoBehaviour
 
         FindPath(myTempPos, playerTempPos);
 
-        if (nodeGridReference.FinalPath.Count > 0)
+        if (nodeGridReference.FinalPath != null && nodeGridReference.FinalPath.Count > 0)
         {
             Vector3 nextNode = nodeGridReference.FinalPath[0].worldPos;
             //Debug.Log(nextNode);
@@ -185,11 +185,6 @@ public class GhostController : MonoBehaviour
         return true;
     }
 
-    private void Move()
-    {
-        transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
-    }
-
     private void AnimateSprite()
     {
         switch (movementDirection)
@@ -217,6 +212,11 @@ public class GhostController : MonoBehaviour
             default:
                 return;
         }
+    }
+
+    private void Move()
+    {
+        transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
     }
 
 
