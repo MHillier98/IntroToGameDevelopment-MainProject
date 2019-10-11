@@ -842,6 +842,10 @@ PrefabInstance:
       propertyPath: TargetPosition
       value: 
       objectReference: {fileID: 1548691478}
+    - target: {fileID: 361736944, guid: 39645f31c69b4ac4fbc34593df3c6fd0, type: 3}
+      propertyPath: debugFullGrid
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39645f31c69b4ac4fbc34593df3c6fd0, type: 3}
 --- !u!1001 &6043108795951356767

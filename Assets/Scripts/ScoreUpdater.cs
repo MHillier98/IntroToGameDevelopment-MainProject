@@ -8,7 +8,10 @@ public class ScoreUpdater : MonoBehaviour
     private TextMeshProUGUI scorerText;
     private PlayerController playerController;
 
-    private bool isHighScorer = false;
+    public string modeType = "Recreation_";
+    private string highScorePrefName = "HighScore";
+
+    public bool isHighScorer = false;
     private int highScore = 0;
 
     void Start()
@@ -16,7 +19,7 @@ public class ScoreUpdater : MonoBehaviour
         scorerText = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Ms Pac-Man").gameObject.GetComponent<PlayerController>();
 
-        highScore = PlayerPrefs.GetInt("High Score", highScore);
+        highScore = PlayerPrefs.GetInt(modeType + highScorePrefName, highScore);
 
         if (isHighScorer)
         {
@@ -33,7 +36,7 @@ public class ScoreUpdater : MonoBehaviour
             if (playerScore > highScore)
             {
                 highScore = playerScore;
-                PlayerPrefs.SetInt("High Score", highScore);
+                PlayerPrefs.SetInt(modeType + highScorePrefName, highScore);
                 scorerText.text = playerScore.ToString();
             }
         }

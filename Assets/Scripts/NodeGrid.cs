@@ -15,6 +15,9 @@ public class NodeGrid : MonoBehaviour
     private int arraySizeX; // X size of the Node Array
     private int arraySizeY; // Y size of the Node Array
 
+    public bool debugPath = true;
+    public bool debugFullGrid = false;
+
     private void Start()
     {
         nodeDiameter = nodeRadius * 2;
@@ -127,30 +130,36 @@ public class NodeGrid : MonoBehaviour
      */
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(worldSize.x, worldSize.y, 1));
-
-        if (nodeArray != null)
+        if (debugPath)
         {
-            foreach (PathNode n in nodeArray)
-            {
-                if (n.isWall)
-                {
-                    Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(worldSize.x, worldSize.y, 1));
 
-                    if (FinalPath != null)
+            if (nodeArray != null)
+            {
+                foreach (PathNode n in nodeArray)
+                {
+                    if (n.isWall)
                     {
-                        if (FinalPath.Contains(n))
+                        Gizmos.color = Color.green;
+
+                        if (FinalPath != null)
                         {
-                            Gizmos.color = Color.yellow;
+                            if (FinalPath.Contains(n))
+                            {
+                                Gizmos.color = Color.yellow;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    Gizmos.color = Color.red;
-                }
+                    else
+                    {
+                        Gizmos.color = Color.red;
+                    }
 
-                Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - distanceBetweenNodes));
+                    if (debugFullGrid || Gizmos.color == Color.yellow)
+                    {
+                        Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - distanceBetweenNodes));
+                    }
+                }
             }
         }
     }
