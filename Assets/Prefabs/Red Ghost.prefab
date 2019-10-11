@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetPosition: {fileID: 0}
-  movementSpeed: 5
+  movementSpeed: 5.5
   movementDirection: Right
 --- !u!114 &361736944
 MonoBehaviour:

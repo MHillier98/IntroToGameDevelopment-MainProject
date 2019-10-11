@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class GhostController : MonoBehaviour
     private NodeGrid nodeGridReference;
 
     public Transform TargetPosition; // position to pathfind to
-    public float movementSpeed = 5.6f;
+    public float movementSpeed = 5.5f;
     public string movementDirection = "Right";
 
     private void Awake()
@@ -19,15 +20,11 @@ public class GhostController : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        movementSpeed = 5.6f;
-        movementDirection = "Right";
     }
 
     private void Update()
     {
         HandlePathfinding();
-        //HandleMovementInput();
         AnimateSprite();
         if (CheckCanMove(movementDirection))
         {
@@ -37,67 +34,65 @@ public class GhostController : MonoBehaviour
 
     private void HandlePathfinding()
     {
-        FindPath(transform.position, TargetPosition.position);
-        
-        Vector3 nextNode = nodeGridReference.FinalPath[0].worldPos;
-        Debug.Log(nextNode);
+        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+        //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
+        Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
 
-        //if (Vector3.Distance(transform.position, nextNode) > 0.05f)
-        //{
+        float playerTempX = (float)Math.Round(TargetPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float playerTempY = (float)Math.Round(TargetPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+        //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
+        Vector3 playerTempPos = new Vector3(playerTempX, playerTempY, 0);
 
-        //}
-        //else
-        //{
+        FindPath(myTempPos, playerTempPos);
 
-        //}
-
-        if (nextNode.x > transform.position.x)
+        if (nodeGridReference.FinalPath.Count > 0)
         {
-            movementDirection = "Right";
-        }
-        else if (nextNode.x < transform.position.x)
-        {
-            movementDirection = "Left";
-        }
+            Vector3 nextNode = nodeGridReference.FinalPath[0].worldPos;
+            //Debug.Log(nextNode);
+            nodeGridReference.FinalPath.RemoveAt(0);
 
-        if (nextNode.y > transform.position.y)
-        {
-            movementDirection = "Up";
-        }
-        else if (nextNode.y < transform.position.y)
-        {
-            movementDirection = "Down";
-        }
-    }
+            //if (nextNode.x == myTempX && nextNode.y == myTempY && nodeGridReference.FinalPath.Count > 0)
+            //{
+            //    nextNode = nodeGridReference.FinalPath[0].worldPos;
+            //    nodeGridReference.FinalPath.RemoveAt(0);
+            //    Debug.Log("reset node");
+            //    Debug.Log(nextNode);
+            //}
 
-    private void HandleMovementInput()
-    {
-        if (Input.GetAxis("Horizontal") > 0)
-        {
-            if (CheckCanMove("Right"))
+            if (nextNode.x != myTempX)
             {
-                movementDirection = "Right";
+                if (nextNode.x > myTempX)
+                {
+                    if (CheckCanMove("Right"))
+                    {
+                        movementDirection = "Right";
+                    }
+                }
+                else if (nextNode.x < myTempX)
+                {
+                    if (CheckCanMove("Left"))
+                    {
+                        movementDirection = "Left";
+                    }
+                }
             }
-        }
-        else if (Input.GetAxis("Horizontal") < 0)
-        {
-            if (CheckCanMove("Left"))
+            else if (nextNode.y != myTempY)
             {
-                movementDirection = "Left";
-            }
-        }
-        else if (Input.GetAxis("Vertical") > 0)
-        {
-            if (CheckCanMove("Up"))
-            {
-                movementDirection = "Up";
-            }
-        }
-        else if (Input.GetAxis("Vertical") < 0)
-        {
-            if (CheckCanMove("Down"))
-            {
-                movementDirection = "Down";
+                if (nextNode.y > myTempY)
+                {
+                    if (CheckCanMove("Up"))
+                    {
+                        movementDirection = "Up";
+                    }
+                }
+                else if (nextNode.y < myTempY)
+                {
+                    if (CheckCanMove("Down"))
+                    {
+                        movementDirection = "Down";
+                    }
+                }
             }
         }
     }
@@ -198,7 +193,7 @@ public class GhostController : MonoBehaviour
             transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
         }
     }
-    
+
 
 
     /*
