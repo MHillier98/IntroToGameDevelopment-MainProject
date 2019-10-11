@@ -112,7 +112,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -126,7 +126,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1.75, y: 1.75}
   m_EdgeRadius: 0
 --- !u!114 &361736948
 MonoBehaviour:
@@ -140,9 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b9f39091b5a244c9c591d1d281f859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetPosition: {fileID: 0}
+  targetPositions: []
+  playerPosition: {fileID: 0}
   movementSpeed: 5.5
-  movementDirection: Right
+  movementDirection: 3
+  pathfindingType: 3
 --- !u!114 &361736944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,3 +163,5 @@ MonoBehaviour:
   worldSize: {x: 28, y: 31}
   nodeRadius: 0.5
   distanceBetweenNodes: 0.5
+  debugPath: 1
+  debugFullGrid: 0

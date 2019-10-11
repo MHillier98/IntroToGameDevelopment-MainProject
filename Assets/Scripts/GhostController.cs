@@ -8,17 +8,20 @@ public class GhostController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private NodeGrid nodeGridReference;
 
-    public Transform TargetPosition; // position to pathfind to
-    public float movementSpeed = 5.5f;
-    public string movementDirection = "Right";
+    public enum MovementDirections { Up, Down, Left, Right };
+    public MovementDirections movementDirection = MovementDirections.Right;
 
-    private void Awake()
-    {
-        nodeGridReference = GetComponent<NodeGrid>();
-    }
+    public enum PathfindingTypes { Random, Clockwise, Run, Follow };
+    public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
+
+    public Transform playerPosition; // player to pathfind to
+    public Transform[] targetPositions; // positions to pathfind to
+
+    public float movementSpeed = 5.5f;
 
     private void Start()
     {
+        nodeGridReference = GetComponent<NodeGrid>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -34,13 +37,30 @@ public class GhostController : MonoBehaviour
 
     private void HandlePathfinding()
     {
+        switch (pathfindingType)
+        {
+            case PathfindingTypes.Random:
+                break;
+            case PathfindingTypes.Clockwise:
+                break;
+            case PathfindingTypes.Run:
+                break;
+            case PathfindingTypes.Follow:
+                FollowPlayer();
+                break;
+            default: return;
+        }
+    }
+
+    private void FollowPlayer()
+    {
         float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
         float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
         //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
 
-        float playerTempX = (float)Math.Round(TargetPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-        float playerTempY = (float)Math.Round(TargetPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+        float playerTempX = (float)Math.Round(playerPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float playerTempY = (float)Math.Round(playerPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
         //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 playerTempPos = new Vector3(playerTempX, playerTempY, 0);
 
@@ -64,16 +84,16 @@ public class GhostController : MonoBehaviour
             {
                 if (nextNode.x > myTempX)
                 {
-                    if (CheckCanMove("Right"))
+                    if (CheckCanMove(MovementDirections.Right))
                     {
-                        movementDirection = "Right";
+                        movementDirection = MovementDirections.Right;
                     }
                 }
                 else if (nextNode.x < myTempX)
                 {
-                    if (CheckCanMove("Left"))
+                    if (CheckCanMove(MovementDirections.Left))
                     {
-                        movementDirection = "Left";
+                        movementDirection = MovementDirections.Left;
                     }
                 }
             }
@@ -81,23 +101,23 @@ public class GhostController : MonoBehaviour
             {
                 if (nextNode.y > myTempY)
                 {
-                    if (CheckCanMove("Up"))
+                    if (CheckCanMove(MovementDirections.Up))
                     {
-                        movementDirection = "Up";
+                        movementDirection = MovementDirections.Up;
                     }
                 }
                 else if (nextNode.y < myTempY)
                 {
-                    if (CheckCanMove("Down"))
+                    if (CheckCanMove(MovementDirections.Down))
                     {
-                        movementDirection = "Down";
+                        movementDirection = MovementDirections.Down;
                     }
                 }
             }
         }
     }
 
-    private bool CheckCanMove(string direction)
+    private bool CheckCanMove(MovementDirections direction)
     {
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
@@ -107,25 +127,25 @@ public class GhostController : MonoBehaviour
 
         switch (direction)
         {
-            case "Right":
+            case MovementDirections.Right:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.right;
                 break;
 
-            case "Left":
+            case MovementDirections.Left:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.left;
                 break;
 
-            case "Up":
+            case MovementDirections.Up:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.up;
                 break;
 
-            case "Down":
+            case MovementDirections.Down:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.down;
@@ -172,25 +192,30 @@ public class GhostController : MonoBehaviour
 
     private void AnimateSprite()
     {
-        if (movementDirection.Equals("Right"))
+        switch (movementDirection)
         {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-        }
-        else if (movementDirection.Equals("Up"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
-        }
-        else if (movementDirection.Equals("Left"))
-        {
-            spriteRenderer.flipY = true;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
-        }
-        else if (movementDirection.Equals("Down"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+            case MovementDirections.Right:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
+                break;
+
+            case MovementDirections.Up:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
+                break;
+
+            case MovementDirections.Left:
+                spriteRenderer.flipY = true;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
+                break;
+
+            case MovementDirections.Down:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+                break;
+
+            default:
+                return;
         }
     }
 

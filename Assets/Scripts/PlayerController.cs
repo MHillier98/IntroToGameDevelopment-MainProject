@@ -8,7 +8,21 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
+    public enum PoweredStates { PoweredUp, PoweredDown }
+    private PoweredStates powerState = PoweredStates.PoweredDown;
+
+    private static int poweredUpTimeMax = 6;
+    private int poweredUpTimeCurrent;
+    
+    public enum MovementDirections { Up, Down, Left, Right };
+    public MovementDirections movementDirection = MovementDirections.Right;
+    
     public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
+    public float movementSpeed = 6.0f;
+    
+    public AudioClip chompSound1 = null;
+    public AudioClip chompSound2 = null;
+    private bool playedChomp1 = false;
 
     private static int startingScore = 0;
     private int currentScore = 0;
@@ -18,19 +32,8 @@ public class PlayerController : MonoBehaviour
     private static int ghostScore = 100;
 
     private int ghostsEatenCounter = 1;
-
-    private bool poweredUp = false;
-    private static int poweredUpTimeMax = 6;
-    private int poweredUpTimeCurrent;
-
-    public float movementSpeed = 6.0f;
-    public string movementDirection = "Right";
-
-    private bool playedChomp1 = false;
-    public AudioClip chomp1 = null;
-    public AudioClip chomp2 = null;
-
-    public GameObject particleObject = null;
+    
+    public GameObject dotParticleObject = null;
 
     private void Start()
     {
@@ -40,10 +43,9 @@ public class PlayerController : MonoBehaviour
         transform.position = startingPosition;
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
-
-        poweredUp = false;
+        powerState = PoweredStates.PoweredDown;
         movementSpeed = 6.0f;
-        movementDirection = "Right";
+        movementDirection = MovementDirections.Right;
         playedChomp1 = false;
     }
 
@@ -62,35 +64,35 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            if (CheckCanMove("Right"))
+            if (CheckCanMove(MovementDirections.Right))
             {
-                movementDirection = "Right";
+                movementDirection = MovementDirections.Right;
             }
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            if (CheckCanMove("Left"))
+            if (CheckCanMove(MovementDirections.Left))
             {
-                movementDirection = "Left";
+                movementDirection = MovementDirections.Left;
             }
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            if (CheckCanMove("Up"))
+            if (CheckCanMove(MovementDirections.Up))
             {
-                movementDirection = "Up";
+                movementDirection = MovementDirections.Up;
             }
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            if (CheckCanMove("Down"))
+            if (CheckCanMove(MovementDirections.Down))
             {
-                movementDirection = "Down";
+                movementDirection = MovementDirections.Down;
             }
         }
     }
 
-    private bool CheckCanMove(string direction)
+    private bool CheckCanMove(MovementDirections direction)
     {
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
@@ -100,25 +102,25 @@ public class PlayerController : MonoBehaviour
 
         switch (direction)
         {
-            case "Right":
+            case MovementDirections.Right:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.right;
                 break;
 
-            case "Left":
+            case MovementDirections.Left:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.left;
                 break;
 
-            case "Up":
+            case MovementDirections.Up:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.up;
                 break;
 
-            case "Down":
+            case MovementDirections.Down:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.down;
@@ -165,25 +167,30 @@ public class PlayerController : MonoBehaviour
 
     private void AnimateSprite()
     {
-        if (movementDirection.Equals("Right"))
+        switch (movementDirection)
         {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-        }
-        else if (movementDirection.Equals("Up"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
-        }
-        else if (movementDirection.Equals("Left"))
-        {
-            spriteRenderer.flipY = true;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
-        }
-        else if (movementDirection.Equals("Down"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+            case MovementDirections.Right:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
+                break;
+
+            case MovementDirections.Up:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
+                break;
+
+            case MovementDirections.Left:
+                spriteRenderer.flipY = true;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
+                break;
+
+            case MovementDirections.Down:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+                break;
+
+            default:
+                return;
         }
     }
 
@@ -197,9 +204,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.tag.Equals("Large Dots"))
         {
-            if (particleObject != null)
+            if (dotParticleObject != null)
             {
-                Instantiate(particleObject, transform.position, transform.rotation);
+                Instantiate(dotParticleObject, transform.position, transform.rotation);
             }
 
             PlayEatSound();
@@ -210,7 +217,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.tag.Equals("Ghosts"))
         {
-            if (poweredUp)
+            if (powerState.Equals(PoweredStates.PoweredUp))
             {
                 Destroy(collision.gameObject);
                 AddScore(ghostScore * ghostsEatenCounter);
@@ -225,14 +232,14 @@ public class PlayerController : MonoBehaviour
 
     public void PlayEatSound()
     {
-        if (playedChomp1 && chomp2 != null)
+        if (playedChomp1 && chompSound2 != null)
         {
-            audioSource.PlayOneShot(chomp2);
+            audioSource.PlayOneShot(chompSound2);
             playedChomp1 = false;
         }
-        else if (!playedChomp1 && chomp1 != null)
+        else if (!playedChomp1 && chompSound1 != null)
         {
-            audioSource.PlayOneShot(chomp1);
+            audioSource.PlayOneShot(chompSound1);
             playedChomp1 = true;
         }
     }
@@ -259,12 +266,12 @@ public class PlayerController : MonoBehaviour
 
     public void PowerUp()
     {
-        poweredUp = true;
+        powerState = PoweredStates.PoweredUp;
     }
 
     public void PowerDown()
     {
-        poweredUp = false;
+        powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
     }
 }

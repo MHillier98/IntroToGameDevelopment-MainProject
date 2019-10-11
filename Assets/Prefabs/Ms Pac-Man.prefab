@@ -115,12 +115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d90df33bfad60f4384dd5f0f7753b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementDirection: 3
   startingPosition: {x: 0, y: -2, z: 0}
   movementSpeed: 6
-  movementDirection: Right
-  chomp1: {fileID: 8300000, guid: aeb3af9e71a40cc43bdc53d21abfc4cf, type: 3}
-  chomp2: {fileID: 8300000, guid: 83449bce7585e864fb564a9e5e49d448, type: 3}
-  particleObject: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
+  chompSound1: {fileID: 8300000, guid: aeb3af9e71a40cc43bdc53d21abfc4cf, type: 3}
+  chompSound2: {fileID: 8300000, guid: 83449bce7585e864fb564a9e5e49d448, type: 3}
+  dotParticleObject: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
     type: 3}
 --- !u!50 &4403822621839253141
 Rigidbody2D:
