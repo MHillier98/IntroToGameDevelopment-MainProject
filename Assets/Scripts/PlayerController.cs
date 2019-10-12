@@ -43,9 +43,11 @@ public class PlayerController : MonoBehaviour
         transform.position = startingPosition;
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
+
         powerState = PoweredStates.PoweredDown;
-        movementSpeed = 6.0f;
         movementDirection = MovementDirections.Right;
+
+        movementSpeed = 6.0f;
         playedChomp1 = false;
     }
 
@@ -181,7 +183,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
         //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
 
-        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
+        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.gameObject.CompareTag("Walls"))
         {
             return false;
         }
@@ -196,13 +198,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag.Equals("Dots"))
+        if (collision.gameObject.CompareTag("Dots"))
         {
             PlayEatSound();
             Destroy(collision.gameObject);
             AddScore(dotScore);
         }
-        else if (collision.tag.Equals("Large Dots"))
+        else if (collision.gameObject.CompareTag("Large Dots"))
         {
             if (dotParticleObject != null)
             {
@@ -215,7 +217,7 @@ public class PlayerController : MonoBehaviour
             PowerUp();
             Invoke("PowerDown", poweredUpTimeCurrent);
         }
-        else if (collision.tag.Equals("Ghosts"))
+        else if (collision.gameObject.CompareTag("Ghosts"))
         {
             if (powerState.Equals(PoweredStates.PoweredUp))
             {

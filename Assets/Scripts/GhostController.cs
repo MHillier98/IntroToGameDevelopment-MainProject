@@ -159,14 +159,6 @@ public class GhostController : MonoBehaviour
             //Debug.Log(nextNode);
             nodeGridReference.FinalPath.RemoveAt(0);
 
-            //if (nextNode.x == myTempX && nextNode.y == myTempY && nodeGridReference.FinalPath.Count > 0)
-            //{
-            //    nextNode = nodeGridReference.FinalPath[0].worldPos;
-            //    nodeGridReference.FinalPath.RemoveAt(0);
-            //    Debug.Log("reset node");
-            //    Debug.Log(nextNode);
-            //}
-
             if (nextNode.x != myTempX)
             {
                 if (nextNode.x > myTempX)
@@ -246,7 +238,7 @@ public class GhostController : MonoBehaviour
         RaycastHit2D hitLeft = Physics2D.Raycast(vectorOffsetLeft, rayDir, checkDistance);
         //Debug.DrawRay(vectorOffsetLeft, rayDir * checkDistance, Color.red);
 
-        if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.tag == "Walls")
+        if (hitLeft.collider != null && hitLeft.collider.tag != null && hitLeft.collider.gameObject.CompareTag("Walls"))
         {
             return false;
         }
@@ -255,7 +247,7 @@ public class GhostController : MonoBehaviour
         RaycastHit2D hitMiddle = Physics2D.Raycast(vectorOffsetMiddle, rayDir, checkDistance);
         //Debug.DrawRay(vectorOffsetMiddle, rayDir * checkDistance, Color.green);
 
-        if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.tag == "Walls")
+        if (hitMiddle.collider != null && hitMiddle.collider.tag != null && hitMiddle.collider.gameObject.CompareTag("Walls"))
         {
             return false;
         }
@@ -264,7 +256,7 @@ public class GhostController : MonoBehaviour
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
         //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
 
-        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
+        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.gameObject.CompareTag("Walls"))
         {
             return false;
         }
