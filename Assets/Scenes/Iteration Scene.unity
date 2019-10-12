@@ -208,6 +208,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Orange Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 240189216006994939, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 240189216006994933, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -362,6 +367,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Teleporters
       objectReference: {fileID: 0}
+    - target: {fileID: 3668461888612866283, guid: ca0062eaa1661224fbf542c2bca427bc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3668461888612866282, guid: ca0062eaa1661224fbf542c2bca427bc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -430,6 +440,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Game Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4324163021225064575, guid: 336270f8a2179ab4390e4afccd8f3a97,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4324163021225064560, guid: 336270f8a2179ab4390e4afccd8f3a97,
         type: 3}
@@ -581,15 +596,15 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2985764023713020313, guid: 336270f8a2179ab4390e4afccd8f3a97,
+    - target: {fileID: 4324163019828289481, guid: 336270f8a2179ab4390e4afccd8f3a97,
         type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
+      propertyPath: modeType
+      value: Iteration_
       objectReference: {fileID: 0}
-    - target: {fileID: 2985764023713020313, guid: 336270f8a2179ab4390e4afccd8f3a97,
+    - target: {fileID: 4324163020299394768, guid: 336270f8a2179ab4390e4afccd8f3a97,
         type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
+      propertyPath: modeType
+      value: Iteration_
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 336270f8a2179ab4390e4afccd8f3a97, type: 3}
@@ -604,6 +619,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ms Pac-Man
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403822621839253139, guid: 01efa70f0b783eb4fb9ff965c84517e4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4403822621839253137, guid: 01efa70f0b783eb4fb9ff965c84517e4,
         type: 3}
@@ -673,6 +693,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pink Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 4799011693673441961, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4799011693673441963, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
         type: 3}
@@ -775,6 +800,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blue Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 5141553797590013830, guid: 7bb7a6f20b94f014ca11e653dfd87074,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5141553797590013828, guid: 7bb7a6f20b94f014ca11e653dfd87074,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -868,6 +898,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game EventSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 5322748498579464503, guid: 640a45fb40d421541bf93a83b5af7724,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5322748498579464500, guid: 640a45fb40d421541bf93a83b5af7724,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -936,6 +971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Red Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 5905008786000379595, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5905008786000379597, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
         type: 3}
@@ -1022,6 +1062,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dots
       objectReference: {fileID: 0}
+    - target: {fileID: 6043108797071281433, guid: 58461515fb583ce40bc57a08ad9f004a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6043108797071281432, guid: 58461515fb583ce40bc57a08ad9f004a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1090,6 +1135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Large Dots
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878059092805463912, guid: 0daa34ebe2e090b44b4273896acb28dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878059092805463915, guid: 0daa34ebe2e090b44b4273896acb28dd,
         type: 3}
@@ -1160,6 +1210,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Tilemap Grid
       objectReference: {fileID: 0}
+    - target: {fileID: 8325546006694775667, guid: 364c639df506a574fb5ca4dda96a74d3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8325546006694775669, guid: 364c639df506a574fb5ca4dda96a74d3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1215,6 +1270,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8325546008360838465, guid: 364c639df506a574fb5ca4dda96a74d3,
+        type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 364c639df506a574fb5ca4dda96a74d3, type: 3}
 --- !u!1001 &8645632093303397590
@@ -1228,6 +1288,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pathfinding Targets
+      objectReference: {fileID: 0}
+    - target: {fileID: 8645632094871926186, guid: 848f3d6ba95c548488b565b997cda69b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8645632094871926187, guid: 848f3d6ba95c548488b565b997cda69b,
         type: 3}
