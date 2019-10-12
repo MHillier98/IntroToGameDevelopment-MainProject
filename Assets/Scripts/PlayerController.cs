@@ -31,9 +31,11 @@ public class PlayerController : MonoBehaviour
     private static int largeDotScore = 50;
     private static int ghostScore = 100;
 
-    private int ghostsEatenCounter = 1;
-
     public GameObject dotParticleObject = null;
+
+    private int ghostsEatenCounter = 1;
+    public AudioClip eatGhostSound = null;
+    public AudioClip deathSound = null;
 
     private void Start()
     {
@@ -211,7 +213,10 @@ public class PlayerController : MonoBehaviour
                 Instantiate(dotParticleObject, transform.position, transform.rotation);
             }
 
-            PlayEatSound();
+            if (eatGhostSound != null)
+            {
+                audioSource.PlayOneShot(eatGhostSound);
+            }
             Destroy(collision.gameObject);
             AddScore(largeDotScore);
             PowerUp();
@@ -224,9 +229,19 @@ public class PlayerController : MonoBehaviour
                 Destroy(collision.gameObject);
                 AddScore(ghostScore * ghostsEatenCounter);
                 ghostsEatenCounter += 1;
+
+                if (eatGhostSound != null)
+                {
+                    audioSource.PlayOneShot(eatGhostSound);
+                }
             }
             else
             {
+                if (deathSound != null)
+                {
+                    audioSource.PlayOneShot(deathSound);
+                }
+
                 transform.position = startingPosition;
                 movementDirection = MovementDirections.Right;
             }
