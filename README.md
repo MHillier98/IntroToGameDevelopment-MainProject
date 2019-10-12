@@ -1,10 +1,10 @@
 # IntroToGameDevelopment-MainProject
-The Unity game project for Assessments 3 + 4, for Intro To Game Development.
+The Unity game project for Intro To Game Development as Assessments 3 + 4.
 
-This project was built in [Unity 2018.3.8](https://unity.com/)
+This project was built in [Unity 2018.3.14f1](https://unity.com/)
 
 
-# Task
+# Recreation Task
 The aim of these two assignments was to recreate a classic game in the Unity game engine.
 
 I chose to recreate 'Ms. Pac-Man', which came with the following constraints:
@@ -13,3 +13,6 @@ I chose to recreate 'Ms. Pac-Man', which came with the following constraints:
    * Pink – Move clock-wise around the level
    * Blue – Run away from Ms. Pac-man
    * Red – Chase Ms. Pac-man
+
+# Design Task
+// todo: add info about the design component of assessment 4
