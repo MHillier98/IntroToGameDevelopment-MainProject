@@ -15,12 +15,15 @@ public class GhostController : MonoBehaviour
     List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
     float timeOfDirCheck = 0f;
 
-    public enum PathfindingTypes { Random, Clockwise, Run, Follow };
+    public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter };
     public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
 
     public Transform playerPosition; // player to pathfind to
+    public Transform[] playerOffsetPositions; // offsets from the player to try and run to
     public Transform[] targetPositions; // positions to pathfind to
+    public Transform[] scatterPositions; // positions to pathfind to
     public int currentTarget = 0;
+    public int currentTargetScatter = 0;
 
     public float movementSpeed = 5.5f;
 
@@ -40,10 +43,15 @@ public class GhostController : MonoBehaviour
         }
     }
 
+
     private void HandlePathfinding()
     {
         switch (pathfindingType)
         {
+            case PathfindingTypes.Scatter:
+                Scatter();
+                break;
+
             case PathfindingTypes.Random:
                 MoveRandomly();
                 break;
@@ -61,6 +69,31 @@ public class GhostController : MonoBehaviour
                 break;
 
             default: return;
+        }
+    }
+
+    private void Scatter()
+    {
+        if (scatterPositions.Length > 1)
+        {
+            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            float targetTempX = (float)Math.Round(scatterPositions[currentTargetScatter].position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float targetTempY = (float)Math.Round(scatterPositions[currentTargetScatter].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            if (myTempX == targetTempX && myTempY == targetTempY)
+            {
+                currentTargetScatter++;
+                if (currentTargetScatter == scatterPositions.Length)
+                {
+                    currentTargetScatter = 0;
+                }
+            }
+            else
+            {
+                FollowTarget(scatterPositions[currentTargetScatter]);
+            }
         }
     }
 
@@ -117,7 +150,7 @@ public class GhostController : MonoBehaviour
             if (myTempX == targetTempX && myTempY == targetTempY)
             {
                 currentTarget++;
-                if (currentTarget == 4)
+                if (currentTarget == targetPositions.Length)
                 {
                     currentTarget = 0;
                 }
@@ -129,8 +162,35 @@ public class GhostController : MonoBehaviour
         }
     }
 
+
     private void RunFromPlayer()
     {
+        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+        Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
+
+        for (int i = 0; i < playerOffsetPositions.Length; i++)
+        {
+            float offsetTempX = (float)Math.Round(playerOffsetPositions[i].position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float offsetTempY = (float)Math.Round(playerOffsetPositions[i].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+            Vector3 offsetTempPos = new Vector3(offsetTempX, offsetTempY, 0);
+            Debug.Log(offsetTempPos);
+
+            FindPath(myTempPos, offsetTempPos);
+
+            if (nodeGridReference.FinalPath != null && nodeGridReference.FinalPath.Count > 0)
+            {
+                Debug.Log("follow target!");
+                FollowTarget(playerOffsetPositions[i]);
+                return;
+            }
+        }
+
+        //aboveOfPlayer = playerTempPos + (playerPosition.transform.up * 4.0f);
+        //aheadOfPlayer = playerTempPos + (playerPosition.transform.right * 4.0f);
+
+        //FindPath(myTempPos, aheadOfPlayer);
+
 
     }
 
