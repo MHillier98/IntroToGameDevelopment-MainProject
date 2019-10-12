@@ -211,7 +211,7 @@ PrefabInstance:
     - target: {fileID: 240189216006994933, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.53
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 240189216006994933, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
         type: 3}
@@ -667,7 +667,7 @@ PrefabInstance:
     - target: {fileID: 4799011693673441963, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.05
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4799011693673441963, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
         type: 3}
@@ -726,19 +726,19 @@ PrefabInstance:
     - target: {fileID: 1082660407, guid: 81544cb3c7cc78e46be74ebb26b8cbe0, type: 3}
       propertyPath: targetPositions.Array.data[0]
       value: 
-      objectReference: {fileID: 1289826736}
+      objectReference: {fileID: 1089463350}
     - target: {fileID: 1082660407, guid: 81544cb3c7cc78e46be74ebb26b8cbe0, type: 3}
       propertyPath: targetPositions.Array.data[1]
       value: 
-      objectReference: {fileID: 1089463350}
+      objectReference: {fileID: 1289826736}
     - target: {fileID: 1082660407, guid: 81544cb3c7cc78e46be74ebb26b8cbe0, type: 3}
       propertyPath: targetPositions.Array.data[2]
       value: 
-      objectReference: {fileID: 821584106}
+      objectReference: {fileID: 1466132937}
     - target: {fileID: 1082660407, guid: 81544cb3c7cc78e46be74ebb26b8cbe0, type: 3}
       propertyPath: targetPositions.Array.data[3]
       value: 
-      objectReference: {fileID: 1977347704}
+      objectReference: {fileID: 821584106}
     - target: {fileID: 1082660407, guid: 81544cb3c7cc78e46be74ebb26b8cbe0, type: 3}
       propertyPath: scatterPositions.Array.data[0]
       value: 
@@ -764,11 +764,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Blue Ghost
-      objectReference: {fileID: 0}
-    - target: {fileID: 5141553797590013830, guid: 7bb7a6f20b94f014ca11e653dfd87074,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5141553797590013828, guid: 7bb7a6f20b94f014ca11e653dfd87074,
         type: 3}
@@ -829,6 +824,14 @@ PrefabInstance:
       propertyPath: playerPosition
       value: 
       objectReference: {fileID: 1548691478}
+    - target: {fileID: 1068319511, guid: 7bb7a6f20b94f014ca11e653dfd87074, type: 3}
+      propertyPath: targetPositions.Array.data[0]
+      value: 
+      objectReference: {fileID: 1089463350}
+    - target: {fileID: 1068319511, guid: 7bb7a6f20b94f014ca11e653dfd87074, type: 3}
+      propertyPath: targetPositions.Array.data[1]
+      value: 
+      objectReference: {fileID: 1466132937}
     - target: {fileID: 1068319511, guid: 7bb7a6f20b94f014ca11e653dfd87074, type: 3}
       propertyPath: scatterPositions.Array.data[0]
       value: 
@@ -927,7 +930,7 @@ PrefabInstance:
     - target: {fileID: 5905008786000379597, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.3999999
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 5905008786000379597, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
         type: 3}

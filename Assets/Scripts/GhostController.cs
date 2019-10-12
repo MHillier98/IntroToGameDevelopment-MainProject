@@ -19,7 +19,6 @@ public class GhostController : MonoBehaviour
     public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
 
     public Transform playerPosition; // player to pathfind to
-    public Transform[] playerOffsetPositions; // offsets from the player to try and run to
     public Transform[] targetPositions; // positions to pathfind to
     public Transform[] scatterPositions; // positions to pathfind to
     public int currentTarget = 0;
@@ -137,61 +136,23 @@ public class GhostController : MonoBehaviour
         }
     }
 
-    private void MoveClockwise()
-    {
-        if (targetPositions.Length > 3)
-        {
-            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-
-            float targetTempX = (float)Math.Round(targetPositions[currentTarget].position.x * 2, MidpointRounding.AwayFromZero) / 2;
-            float targetTempY = (float)Math.Round(targetPositions[currentTarget].position.y * 2, MidpointRounding.AwayFromZero) / 2;
-
-            if (myTempX == targetTempX && myTempY == targetTempY)
-            {
-                currentTarget++;
-                if (currentTarget == targetPositions.Length)
-                {
-                    currentTarget = 0;
-                }
-            }
-            else
-            {
-                FollowTarget(targetPositions[currentTarget]);
-            }
-        }
-    }
-
 
     private void RunFromPlayer()
     {
-        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-        Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
 
-        for (int i = 0; i < playerOffsetPositions.Length; i++)
+        if (Vector3.Distance(playerPosition.transform.position, transform.position) <= 12.0f)
         {
-            float offsetTempX = (float)Math.Round(playerOffsetPositions[i].position.x * 2, MidpointRounding.AwayFromZero) / 2;
-            float offsetTempY = (float)Math.Round(playerOffsetPositions[i].position.y * 2, MidpointRounding.AwayFromZero) / 2;
-            Vector3 offsetTempPos = new Vector3(offsetTempX, offsetTempY, 0);
-            Debug.Log(offsetTempPos);
-
-            FindPath(myTempPos, offsetTempPos);
-
-            if (nodeGridReference.FinalPath != null && nodeGridReference.FinalPath.Count > 0)
+            if (timeOfDirCheck + 0.4f < Time.time)
             {
-                Debug.Log("follow target!");
-                FollowTarget(playerOffsetPositions[i]);
-                return;
+                MoveClockwise();
+                timeOfDirCheck = Time.time;
             }
         }
+        else
+        {
 
-        //aboveOfPlayer = playerTempPos + (playerPosition.transform.up * 4.0f);
-        //aheadOfPlayer = playerTempPos + (playerPosition.transform.right * 4.0f);
-
-        //FindPath(myTempPos, aheadOfPlayer);
-
-
+            Scatter();
+        }
     }
 
     private void FollowPlayer()
@@ -203,12 +164,10 @@ public class GhostController : MonoBehaviour
     {
         float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
         float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-        //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
 
         float playerTempX = (float)Math.Round(target.position.x * 2, MidpointRounding.AwayFromZero) / 2;
         float playerTempY = (float)Math.Round(target.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-        //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 playerTempPos = new Vector3(playerTempX, playerTempY, 0);
 
         FindPath(myTempPos, playerTempPos);
@@ -216,7 +175,6 @@ public class GhostController : MonoBehaviour
         if (nodeGridReference.FinalPath != null && nodeGridReference.FinalPath.Count > 0)
         {
             Vector3 nextNode = nodeGridReference.FinalPath[0].worldPos;
-            //Debug.Log(nextNode);
             nodeGridReference.FinalPath.RemoveAt(0);
 
             if (nextNode.x != myTempX)
@@ -252,6 +210,31 @@ public class GhostController : MonoBehaviour
                         movementDirection = MovementDirections.Down;
                     }
                 }
+            }
+        }
+    }
+
+    private void MoveClockwise()
+    {
+        if (targetPositions.Length > 0)
+        {
+            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            float targetTempX = (float)Math.Round(targetPositions[currentTarget].position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float targetTempY = (float)Math.Round(targetPositions[currentTarget].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            if (myTempX == targetTempX && myTempY == targetTempY)
+            {
+                currentTarget++;
+                if (currentTarget == targetPositions.Length)
+                {
+                    currentTarget = 0;
+                }
+            }
+            else
+            {
+                FollowTarget(targetPositions[currentTarget]);
             }
         }
     }

@@ -164,8 +164,9 @@ MonoBehaviour:
   movementDirection: 3
   pathfindingType: 2
   playerPosition: {fileID: 0}
-  playerOffsetPositions: []
-  targetPositions: []
+  targetPositions:
+  - {fileID: 0}
+  - {fileID: 0}
   scatterPositions:
   - {fileID: 0}
   - {fileID: 0}
