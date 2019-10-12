@@ -8,7 +8,21 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
+    public enum PoweredStates { PoweredUp, PoweredDown }
+    private PoweredStates powerState = PoweredStates.PoweredDown;
+
+    private static int poweredUpTimeMax = 6;
+    private int poweredUpTimeCurrent;
+
+    public enum MovementDirections { Up, Down, Left, Right };
+    public MovementDirections movementDirection = MovementDirections.Right;
+
     public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
+    public float movementSpeed = 6.0f;
+
+    public AudioClip chompSound1 = null;
+    public AudioClip chompSound2 = null;
+    private bool playedChomp1 = false;
 
     private static int startingScore = 0;
     private int currentScore = 0;
@@ -19,31 +33,21 @@ public class PlayerController : MonoBehaviour
 
     private int ghostsEatenCounter = 1;
 
-    private bool poweredUp = false;
-    private static int poweredUpTimeMax = 6;
-    private int poweredUpTimeCurrent;
+    public GameObject dotParticleObject = null;
 
-    public float movementSpeed = 6.0f;
-    private string movementDirection = "Right";
-
-    private bool playedChomp1 = false;
-    public AudioClip chomp1 = null;
-    public AudioClip chomp2 = null;
-
-    public GameObject particleObject = null;
-
-    private bool canMove = true;
-
-    void Start()
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
         transform.position = startingPosition;
         currentScore = startingScore;
-        poweredUp = false;
         poweredUpTimeCurrent = poweredUpTimeMax;
-        movementDirection = "Right";
+
+        powerState = PoweredStates.PoweredDown;
+        movementDirection = MovementDirections.Right;
+
+        movementSpeed = 6.0f;
         playedChomp1 = false;
     }
 
@@ -62,35 +66,64 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            if (CheckCanMove("Right"))
+            if (CheckCanMove(MovementDirections.Right))
             {
-                movementDirection = "Right";
+                movementDirection = MovementDirections.Right;
             }
         }
         else if (Input.GetAxis("Horizontal") < 0)
         {
-            if (CheckCanMove("Left"))
+            if (CheckCanMove(MovementDirections.Left))
             {
-                movementDirection = "Left";
+                movementDirection = MovementDirections.Left;
             }
         }
         else if (Input.GetAxis("Vertical") > 0)
         {
-            if (CheckCanMove("Up"))
+            if (CheckCanMove(MovementDirections.Up))
             {
-                movementDirection = "Up";
+                movementDirection = MovementDirections.Up;
             }
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            if (CheckCanMove("Down"))
+            if (CheckCanMove(MovementDirections.Down))
             {
-                movementDirection = "Down";
+                movementDirection = MovementDirections.Down;
             }
         }
     }
 
-    private bool CheckCanMove(string direction)
+    private void AnimateSprite()
+    {
+        switch (movementDirection)
+        {
+            case MovementDirections.Right:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
+                break;
+
+            case MovementDirections.Up:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
+                break;
+
+            case MovementDirections.Left:
+                spriteRenderer.flipY = true;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
+                break;
+
+            case MovementDirections.Down:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+                break;
+
+            default:
+                return;
+        }
+    }
+
+    private bool CheckCanMove(MovementDirections direction)
     {
         float rayOffsetX = 0.0f;
         float rayOffsetY = 0.0f;
@@ -100,25 +133,25 @@ public class PlayerController : MonoBehaviour
 
         switch (direction)
         {
-            case "Right":
+            case MovementDirections.Right:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.right;
                 break;
 
-            case "Left":
+            case MovementDirections.Left:
                 rayOffsetX = 0.0f;
                 rayOffsetY = rayOffset;
                 rayDir = Vector3.left;
                 break;
 
-            case "Up":
+            case MovementDirections.Up:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.up;
                 break;
 
-            case "Down":
+            case MovementDirections.Down:
                 rayOffsetX = rayOffset;
                 rayOffsetY = 0.0f;
                 rayDir = Vector3.down;
@@ -150,7 +183,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitRight = Physics2D.Raycast(vectorOffsetRight, rayDir, checkDistance);
         //Debug.DrawRay(vectorOffsetRight, rayDir * checkDistance, Color.cyan);
 
-        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.tag == "Walls")
+        if (hitRight.collider != null && hitRight.collider.tag != null && hitRight.collider.gameObject.CompareTag("Walls"))
         {
             return false;
         }
@@ -163,43 +196,19 @@ public class PlayerController : MonoBehaviour
         transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
     }
 
-    private void AnimateSprite()
-    {
-        if (movementDirection.Equals("Right"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-        }
-        else if (movementDirection.Equals("Up"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
-        }
-        else if (movementDirection.Equals("Left"))
-        {
-            spriteRenderer.flipY = true;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
-        }
-        else if (movementDirection.Equals("Down"))
-        {
-            spriteRenderer.flipY = false;
-            transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag.Equals("Dots"))
+        if (collision.gameObject.CompareTag("Dots"))
         {
             PlayEatSound();
             Destroy(collision.gameObject);
             AddScore(dotScore);
         }
-        else if (collision.tag.Equals("Large Dots"))
+        else if (collision.gameObject.CompareTag("Large Dots"))
         {
-            if (particleObject != null)
+            if (dotParticleObject != null)
             {
-                Instantiate(particleObject, transform.position, transform.rotation);
+                Instantiate(dotParticleObject, transform.position, transform.rotation);
             }
 
             PlayEatSound();
@@ -208,9 +217,9 @@ public class PlayerController : MonoBehaviour
             PowerUp();
             Invoke("PowerDown", poweredUpTimeCurrent);
         }
-        else if (collision.tag.Equals("Ghosts"))
+        else if (collision.gameObject.CompareTag("Ghosts"))
         {
-            if (poweredUp)
+            if (powerState.Equals(PoweredStates.PoweredUp))
             {
                 Destroy(collision.gameObject);
                 AddScore(ghostScore * ghostsEatenCounter);
@@ -219,20 +228,21 @@ public class PlayerController : MonoBehaviour
             else
             {
                 transform.position = startingPosition;
+                movementDirection = MovementDirections.Right;
             }
         }
     }
 
     public void PlayEatSound()
     {
-        if (playedChomp1 && chomp2 != null)
+        if (playedChomp1 && chompSound2 != null)
         {
-            audioSource.PlayOneShot(chomp2);
+            audioSource.PlayOneShot(chompSound2);
             playedChomp1 = false;
         }
-        else if (!playedChomp1 && chomp1 != null)
+        else if (!playedChomp1 && chompSound1 != null)
         {
-            audioSource.PlayOneShot(chomp1);
+            audioSource.PlayOneShot(chompSound1);
             playedChomp1 = true;
         }
     }
@@ -259,12 +269,12 @@ public class PlayerController : MonoBehaviour
 
     public void PowerUp()
     {
-        poweredUp = true;
+        powerState = PoweredStates.PoweredUp;
     }
 
     public void PowerDown()
     {
-        poweredUp = false;
+        powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
     }
 }
