@@ -226,6 +226,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 transform.position = startingPosition;
+                movementDirection = MovementDirections.Right;
             }
         }
     }

@@ -164,7 +164,12 @@ MonoBehaviour:
   movementDirection: 3
   pathfindingType: 1
   playerPosition: {fileID: 0}
-  targetPositions: []
+  targetPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentTarget: 0
   movementSpeed: 5.5
 --- !u!50 &663470226
 Rigidbody2D:

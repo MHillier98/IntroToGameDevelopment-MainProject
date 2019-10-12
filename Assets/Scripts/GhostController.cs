@@ -20,6 +20,7 @@ public class GhostController : MonoBehaviour
 
     public Transform playerPosition; // player to pathfind to
     public Transform[] targetPositions; // positions to pathfind to
+    public int currentTarget = 0;
 
     public float movementSpeed = 5.5f;
 
@@ -105,7 +106,27 @@ public class GhostController : MonoBehaviour
 
     private void MoveClockwise()
     {
+        if (targetPositions.Length > 3)
+        {
+            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
 
+            float targetTempX = (float)Math.Round(targetPositions[currentTarget].position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float targetTempY = (float)Math.Round(targetPositions[currentTarget].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            if (myTempX == targetTempX && myTempY == targetTempY)
+            {
+                currentTarget++;
+                if (currentTarget == 4)
+                {
+                    currentTarget = 0;
+                }
+            }
+            else
+            {
+                FollowTarget(targetPositions[currentTarget]);
+            }
+        }
     }
 
     private void RunFromPlayer()
@@ -115,13 +136,18 @@ public class GhostController : MonoBehaviour
 
     private void FollowPlayer()
     {
+        FollowTarget(playerPosition);
+    }
+
+    private void FollowTarget(Transform target)
+    {
         float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
         float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
         //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 myTempPos = new Vector3(myTempX, myTempY, 0);
 
-        float playerTempX = (float)Math.Round(playerPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-        float playerTempY = (float)Math.Round(playerPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+        float playerTempX = (float)Math.Round(target.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float playerTempY = (float)Math.Round(target.position.y * 2, MidpointRounding.AwayFromZero) / 2;
         //Debug.Log("tempX: " + tempX + ", tempY: " + tempY);
         Vector3 playerTempPos = new Vector3(playerTempX, playerTempY, 0);
 
