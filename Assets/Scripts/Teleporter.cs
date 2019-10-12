@@ -9,7 +9,7 @@ public class Teleporter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Ms Pac-Man")
+        if (collision.tag.Equals("Ms Pac-Man") || collision.tag.Equals("Ghosts"))
         {
             if (teleportToPoint != null)
             {

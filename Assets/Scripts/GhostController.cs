@@ -12,6 +12,9 @@ public class GhostController : MonoBehaviour
     public enum MovementDirections { Up, Down, Left, Right };
     public MovementDirections movementDirection = MovementDirections.Right;
 
+    List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
+    float timeOfDirCheck = 0f;
+
     public enum PathfindingTypes { Random, Clockwise, Run, Follow };
     public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
 
@@ -60,40 +63,42 @@ public class GhostController : MonoBehaviour
         }
     }
 
-    List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
-
     private void MoveRandomly()
     {
-        List<MovementDirections> canMoveDirs = new List<MovementDirections>();
-
-        if (CheckCanMove(MovementDirections.Up))
+        if (timeOfDirCheck + 0.4f < Time.time)
         {
-            canMoveDirs.Add(MovementDirections.Up);
-        }
+            List<MovementDirections> canMoveDirs = new List<MovementDirections>();
 
-        if (CheckCanMove(MovementDirections.Down))
-        {
-            canMoveDirs.Add(MovementDirections.Down);
-        }
-
-        if (CheckCanMove(MovementDirections.Left))
-        {
-            canMoveDirs.Add(MovementDirections.Left);
-        }
-
-        if (CheckCanMove(MovementDirections.Right))
-        {
-            canMoveDirs.Add(MovementDirections.Right);
-        }
-
-        if (!lastCanMoveDirs.SequenceEqual(canMoveDirs))
-        {
-            if (canMoveDirs.Count > 1)
+            if (CheckCanMove(MovementDirections.Up))
             {
-                int maxNum = canMoveDirs.Count ;
-                int randNum = (int)UnityEngine.Random.Range(0f, (float)maxNum);
-                movementDirection = canMoveDirs[randNum];
-                lastCanMoveDirs = canMoveDirs;
+                canMoveDirs.Add(MovementDirections.Up);
+            }
+
+            if (CheckCanMove(MovementDirections.Down))
+            {
+                canMoveDirs.Add(MovementDirections.Down);
+            }
+
+            if (CheckCanMove(MovementDirections.Left))
+            {
+                canMoveDirs.Add(MovementDirections.Left);
+            }
+
+            if (CheckCanMove(MovementDirections.Right))
+            {
+                canMoveDirs.Add(MovementDirections.Right);
+            }
+
+            if (!lastCanMoveDirs.SequenceEqual(canMoveDirs))
+            {
+                if (canMoveDirs.Count > 1)
+                {
+                    int maxNum = canMoveDirs.Count;
+                    int randNum = (int)UnityEngine.Random.Range(0f, (float)maxNum);
+                    movementDirection = canMoveDirs[randNum];
+                    lastCanMoveDirs = canMoveDirs;
+                    timeOfDirCheck = Time.time;
+                }
             }
         }
     }
