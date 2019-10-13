@@ -15,8 +15,9 @@ public class GhostController : MonoBehaviour
     List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
     float timeOfDirCheck = 0f;
 
-    public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter };
+    public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter, StartReset };
     public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
+    public PathfindingTypes lastPathfindingType;
 
     public Transform playerPosition; // player to pathfind to
     public Transform[] targetPositions; // positions to pathfind to
@@ -25,6 +26,7 @@ public class GhostController : MonoBehaviour
     public int currentTargetScatter = 0;
 
     public float movementSpeed = 5.5f;
+    public Transform startingPosition;
 
     private void Start()
     {
@@ -67,8 +69,51 @@ public class GhostController : MonoBehaviour
                 FollowPlayer();
                 break;
 
+            case PathfindingTypes.StartReset:
+                BackToStart();
+                break;
+
             default: return;
         }
+    }
+
+    public void BackToStart()
+    {
+        FollowTarget(startingPosition);
+
+        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+        float startTempX = (float)Math.Round(startingPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float startTempY = (float)Math.Round(startingPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+        if (myTempX == startTempX && myTempY == startTempY)
+        {
+            BoxCollider2D box = GetComponent<BoxCollider2D>();
+            box.enabled = true;
+            ResetPathfindingType();
+        }
+    }
+
+    public void Die()
+    {
+        lastPathfindingType = pathfindingType;
+        pathfindingType = PathfindingTypes.StartReset;
+
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        box.enabled = false;
+    }
+
+    public void InvokeScatter()
+    {
+        lastPathfindingType = pathfindingType;
+        pathfindingType = PathfindingTypes.Scatter;
+        Invoke("ResetPathfindingType", 7.0f);
+    }
+
+    public void ResetPathfindingType()
+    {
+        pathfindingType = lastPathfindingType;
     }
 
     private void Scatter()

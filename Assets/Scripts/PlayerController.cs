@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
+    private GameManager gameManager;
+
     public enum PoweredStates { PoweredUp, PoweredDown }
     private PoweredStates powerState = PoweredStates.PoweredDown;
 
@@ -41,6 +43,8 @@ public class PlayerController : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+
+        gameManager = FindObjectOfType<GameManager>();
 
         transform.position = startingPosition;
         currentScore = startingScore;
@@ -208,6 +212,11 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Large Dots"))
         {
+            if (gameManager != null)
+            {
+                gameManager.SendMessage("ScatterAllGhosts");
+            }
+
             if (dotParticleObject != null)
             {
                 Instantiate(dotParticleObject, transform.position, transform.rotation);
@@ -217,6 +226,7 @@ public class PlayerController : MonoBehaviour
             {
                 audioSource.PlayOneShot(eatGhostSound);
             }
+
             Destroy(collision.gameObject);
             AddScore(largeDotScore);
             PowerUp();
@@ -226,7 +236,9 @@ public class PlayerController : MonoBehaviour
         {
             if (powerState.Equals(PoweredStates.PoweredUp))
             {
-                Destroy(collision.gameObject);
+                GhostController ghostController = collision.gameObject.GetComponent<GhostController>();
+                ghostController.SendMessage("Die");
+
                 AddScore(ghostScore * ghostsEatenCounter);
                 ghostsEatenCounter += 1;
 

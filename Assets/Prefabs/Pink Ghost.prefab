@@ -163,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: 3
   pathfindingType: 1
+  lastPathfindingType: 0
   playerPosition: {fileID: 0}
   targetPositions:
   - {fileID: 0}
@@ -176,6 +177,7 @@ MonoBehaviour:
   currentTarget: 0
   currentTargetScatter: 0
   movementSpeed: 5.5
+  startingPosition: {fileID: 0}
 --- !u!50 &663470226
 Rigidbody2D:
   serializedVersion: 4
