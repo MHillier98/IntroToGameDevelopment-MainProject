@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
+
+    private GameManager gameManager;
 
     public enum PoweredStates { PoweredUp, PoweredDown }
     private PoweredStates powerState = PoweredStates.PoweredDown;
@@ -31,18 +34,29 @@ public class PlayerController : MonoBehaviour
     private static int largeDotScore = 50;
     private static int ghostScore = 100;
 
-    private int ghostsEatenCounter = 1;
-
     public GameObject dotParticleObject = null;
+
+    private int ghostsEatenCounter = 1;
+    public AudioClip eatGhostSound = null;
+    public AudioClip deathSound = null;
+
+    public int maxLives = 3;
+    public int currentLives = 3;
+
+    public float ghostEatTimer = -10f;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        transform.position = startingPosition;
+        gameManager = FindObjectOfType<GameManager>();
+
+        ResetPosition();
+
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
+        currentLives = maxLives;
 
         powerState = PoweredStates.PoweredDown;
         movementDirection = MovementDirections.Right;
@@ -157,7 +171,7 @@ public class PlayerController : MonoBehaviour
                 rayDir = Vector3.down;
                 break;
 
-            default: // this should never happen as direction should always be set
+            default: // direction will always be set, so this will never run
                 return false;
         }
 
@@ -198,6 +212,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        CheckCollision(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        CheckCollision(collision);
+    }
+
+    private void CheckCollision(Collider2D collision)
+    {
         if (collision.gameObject.CompareTag("Dots"))
         {
             PlayEatSound();
@@ -206,12 +230,21 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Large Dots"))
         {
+            if (gameManager != null)
+            {
+                gameManager.SendMessage("ScatterAllGhosts");
+            }
+
             if (dotParticleObject != null)
             {
                 Instantiate(dotParticleObject, transform.position, transform.rotation);
             }
 
-            PlayEatSound();
+            if (eatGhostSound != null)
+            {
+                audioSource.PlayOneShot(eatGhostSound);
+            }
+
             Destroy(collision.gameObject);
             AddScore(largeDotScore);
             PowerUp();
@@ -221,19 +254,47 @@ public class PlayerController : MonoBehaviour
         {
             if (powerState.Equals(PoweredStates.PoweredUp))
             {
-                Destroy(collision.gameObject);
+                GhostController ghostController = collision.gameObject.GetComponent<GhostController>();
+                ghostController.SendMessage("Die");
+
                 AddScore(ghostScore * ghostsEatenCounter);
                 ghostsEatenCounter += 1;
+                StartCoroutine(PauseGame(1.0f));
+
+                if (eatGhostSound != null)
+                {
+                    audioSource.PlayOneShot(eatGhostSound);
+                }
             }
             else
             {
-                transform.position = startingPosition;
-                movementDirection = MovementDirections.Right;
+                if (ghostEatTimer + 2f < Time.time)
+                {
+                    if (deathSound != null)
+                    {
+                        audioSource.PlayOneShot(deathSound);
+                    }
+
+                    LoseLife();
+                    StartCoroutine(PauseGame(3.0f));
+                    ghostEatTimer = Time.time;
+
+                    if (currentLives > 0)
+                    {
+                        transform.position = startingPosition;
+                        movementDirection = MovementDirections.Right;
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(999f, 999f);
+                        StartCoroutine(EndGame());
+                    }
+                }
             }
         }
     }
 
-    public void PlayEatSound()
+    private void PlayEatSound()
     {
         if (playedChomp1 && chompSound2 != null)
         {
@@ -247,14 +308,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private IEnumerator PauseGame(float time)
+    {
+        Time.timeScale = 0f;
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        Time.timeScale = 1f;
+    }
+
+    private IEnumerator EndGame()
+    {
+        gameManager.SendMessage("ScatterAllGhosts");
+        gameManager.SendMessage("EndGame");
+        float pauseEndTime = Time.realtimeSinceStartup + 5.0f;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+    }
+
     public void SetScore(int newScore)
     {
         currentScore = newScore;
     }
 
-    public void AddScore(int addScore)
+    public int GetScore()
     {
-        currentScore += addScore;
+        return currentScore;
     }
 
     public void IncrementScore()
@@ -262,9 +346,29 @@ public class PlayerController : MonoBehaviour
         currentScore += 1;
     }
 
-    public int GetScore()
+    public void AddScore(int addScore)
     {
-        return currentScore;
+        currentScore += addScore;
+    }
+
+    public void ResetLives()
+    {
+        currentLives = maxLives;
+    }
+
+    public int GetCurrentLives()
+    {
+        return currentLives;
+    }
+
+    public int GetMaxLives()
+    {
+        return maxLives;
+    }
+
+    public void LoseLife()
+    {
+        currentLives--;
     }
 
     public void PowerUp()
@@ -276,5 +380,11 @@ public class PlayerController : MonoBehaviour
     {
         powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
+    }
+
+    public void ResetPosition()
+    {
+        movementDirection = MovementDirections.Right;
+        transform.position = startingPosition;
     }
 }

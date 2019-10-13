@@ -5,8 +5,8 @@ using UnityEngine;
 public class LargeDotParticleController : MonoBehaviour
 {
     private float destroyTimer = 3.0f;
-    
-    void Start()
+
+    private void Start()
     {
         Destroy(this, destroyTimer);
     }

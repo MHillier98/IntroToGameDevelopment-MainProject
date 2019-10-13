@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 3895603
-  m_SortingLayer: 5
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f6ab720a7a8b5e44f94de1780261c387, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -122,6 +122,10 @@ MonoBehaviour:
   chompSound2: {fileID: 8300000, guid: 83449bce7585e864fb564a9e5e49d448, type: 3}
   dotParticleObject: {fileID: 3939532109335709591, guid: 7ee57a7e029912e4d8b45d264f6c8c5d,
     type: 3}
+  eatGhostSound: {fileID: 8300000, guid: b75f96d4f8b12614a8e0d5ac99e682ae, type: 3}
+  deathSound: {fileID: 8300000, guid: 4151fe84818c43c49b9331d79d1a76c3, type: 3}
+  maxLives: 3
+  currentLives: 3
 --- !u!50 &4403822621839253141
 Rigidbody2D:
   serializedVersion: 4
