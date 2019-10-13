@@ -48,7 +48,6 @@ public class GhostController : MonoBehaviour
         }
     }
 
-
     private void HandlePathfinding()
     {
         switch (pathfindingType)
@@ -79,47 +78,6 @@ public class GhostController : MonoBehaviour
 
             default: return;
         }
-    }
-
-    public void BackToStart()
-    {
-        FollowTarget(startingPosition);
-
-        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-
-        float startTempX = (float)Math.Round(startingPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-        float startTempY = (float)Math.Round(startingPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
-
-        if (myTempX == startTempX && myTempY == startTempY)
-        {
-            ResetPathfindingType();
-        }
-    }
-
-    public void Die()
-    {
-        animator.SetBool("Dead", true);
-        pathfindingType = PathfindingTypes.StartReset;
-        boxCollider2D.enabled = false;
-
-        //Invoke("ResetPathfindingType", 7.0f);
-    }
-
-    public void InvokeScatter()
-    {
-        animator.SetBool("Scattering", true);
-        pathfindingType = PathfindingTypes.Scatter;
-
-        Invoke("ResetPathfindingType", 7.0f);
-    }
-
-    public void ResetPathfindingType()
-    {
-        boxCollider2D.enabled = true;
-        pathfindingType = defaultPathfindingType;
-        animator.SetBool("Scattering", false);
-        animator.SetBool("Dead", false);
     }
 
     private void Scatter()
@@ -178,7 +136,7 @@ public class GhostController : MonoBehaviour
                 if (canMoveDirs.Count > 1)
                 {
                     int maxNum = canMoveDirs.Count;
-                    int randNum = (int)UnityEngine.Random.Range(0f, (float)maxNum);
+                    int randNum = UnityEngine.Random.Range(0, maxNum);
                     movementDirection = canMoveDirs[randNum];
                     lastCanMoveDirs = canMoveDirs;
                     timeOfDirCheck = Time.time;
@@ -187,11 +145,34 @@ public class GhostController : MonoBehaviour
         }
     }
 
+    private void MoveClockwise()
+    {
+        if (targetPositions.Length > 0)
+        {
+            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            float targetTempX = (float)Math.Round(targetPositions[currentTarget].position.x * 2, MidpointRounding.AwayFromZero) / 2;
+            float targetTempY = (float)Math.Round(targetPositions[currentTarget].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+            if (myTempX == targetTempX && myTempY == targetTempY)
+            {
+                currentTarget++;
+                if (currentTarget == targetPositions.Length)
+                {
+                    currentTarget = 0;
+                }
+            }
+            else
+            {
+                FollowTarget(targetPositions[currentTarget]);
+            }
+        }
+    }
 
     private void RunFromPlayer()
     {
-
-        if (Vector3.Distance(playerPosition.transform.position, transform.position) <= 12.0f)
+        if (Vector3.Distance(playerPosition.transform.position, transform.position) <= 10.0f)
         {
             if (timeOfDirCheck + 0.4f < Time.time)
             {
@@ -201,7 +182,6 @@ public class GhostController : MonoBehaviour
         }
         else
         {
-
             Scatter();
         }
     }
@@ -209,6 +189,22 @@ public class GhostController : MonoBehaviour
     private void FollowPlayer()
     {
         FollowTarget(playerPosition);
+    }
+
+    private void BackToStart()
+    {
+        FollowTarget(startingPosition);
+
+        float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+        float startTempX = (float)Math.Round(startingPosition.position.x * 2, MidpointRounding.AwayFromZero) / 2;
+        float startTempY = (float)Math.Round(startingPosition.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+
+        if (myTempX == startTempX && myTempY == startTempY)
+        {
+            ResetPathfindingType();
+        }
     }
 
     private void FollowTarget(Transform target)
@@ -265,28 +261,54 @@ public class GhostController : MonoBehaviour
         }
     }
 
-    private void MoveClockwise()
+    private void ResetPathfindingType()
     {
-        if (targetPositions.Length > 0)
+        boxCollider2D.enabled = true;
+        pathfindingType = defaultPathfindingType;
+        animator.SetBool("Scattering", false);
+        animator.SetBool("Dead", false);
+    }
+
+    public void Die()
+    {
+        animator.SetBool("Dead", true);
+        pathfindingType = PathfindingTypes.StartReset;
+        boxCollider2D.enabled = false;
+    }
+
+    public void InvokeScatter()
+    {
+        animator.SetBool("Scattering", true);
+        pathfindingType = PathfindingTypes.Scatter;
+        Invoke("ResetPathfindingType", 7.0f);
+    }
+
+    private void AnimateSprite()
+    {
+        switch (movementDirection)
         {
-            float myTempX = (float)Math.Round(transform.position.x * 2, MidpointRounding.AwayFromZero) / 2;
-            float myTempY = (float)Math.Round(transform.position.y * 2, MidpointRounding.AwayFromZero) / 2;
+            case MovementDirections.Right:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
+                break;
 
-            float targetTempX = (float)Math.Round(targetPositions[currentTarget].position.x * 2, MidpointRounding.AwayFromZero) / 2;
-            float targetTempY = (float)Math.Round(targetPositions[currentTarget].position.y * 2, MidpointRounding.AwayFromZero) / 2;
+            case MovementDirections.Up:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
+                break;
 
-            if (myTempX == targetTempX && myTempY == targetTempY)
-            {
-                currentTarget++;
-                if (currentTarget == targetPositions.Length)
-                {
-                    currentTarget = 0;
-                }
-            }
-            else
-            {
-                FollowTarget(targetPositions[currentTarget]);
-            }
+            case MovementDirections.Left:
+                spriteRenderer.flipY = true;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
+                break;
+
+            case MovementDirections.Down:
+                spriteRenderer.flipY = false;
+                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
+                break;
+
+            default:
+                return;
         }
     }
 
@@ -356,35 +378,6 @@ public class GhostController : MonoBehaviour
         }
 
         return true;
-    }
-
-    private void AnimateSprite()
-    {
-        switch (movementDirection)
-        {
-            case MovementDirections.Right:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-                break;
-
-            case MovementDirections.Up:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f);
-                break;
-
-            case MovementDirections.Left:
-                spriteRenderer.flipY = true;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180.0f);
-                break;
-
-            case MovementDirections.Down:
-                spriteRenderer.flipY = false;
-                transform.localEulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270.0f);
-                break;
-
-            default:
-                return;
-        }
     }
 
     private void Move()

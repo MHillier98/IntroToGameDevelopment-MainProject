@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
                 rayDir = Vector3.down;
                 break;
 
-            default: // this should never happen as direction should always be set
+            default: // direction will always be set, so this will never run
                 return false;
         }
 
@@ -276,7 +276,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayEatSound()
+    private void PlayEatSound()
     {
         if (playedChomp1 && chompSound2 != null)
         {
@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public IEnumerator PauseGame(float time)
+    private IEnumerator PauseGame(float time)
     {
         Time.timeScale = 0f;
         float pauseEndTime = Time.realtimeSinceStartup + time;
@@ -306,9 +306,9 @@ public class PlayerController : MonoBehaviour
         currentScore = newScore;
     }
 
-    public void AddScore(int addScore)
+    public int GetScore()
     {
-        currentScore += addScore;
+        return currentScore;
     }
 
     public void IncrementScore()
@@ -316,20 +316,14 @@ public class PlayerController : MonoBehaviour
         currentScore += 1;
     }
 
-    public int GetScore()
+    public void AddScore(int addScore)
     {
-        return currentScore;
+        currentScore += addScore;
     }
 
-    public void PowerUp()
+    public void ResetLives()
     {
-        powerState = PoweredStates.PoweredUp;
-    }
-
-    public void PowerDown()
-    {
-        powerState = PoweredStates.PoweredDown;
-        ghostsEatenCounter = 1;
+        currentLives = maxLives;
     }
 
     public int GetCurrentLives()
@@ -342,13 +336,19 @@ public class PlayerController : MonoBehaviour
         return maxLives;
     }
 
-    public void ResetLives()
-    {
-        currentLives = maxLives;
-    }
-
     public void LoseLife()
     {
         currentLives--;
+    }
+
+    public void PowerUp()
+    {
+        powerState = PoweredStates.PoweredUp;
+    }
+
+    public void PowerDown()
+    {
+        powerState = PoweredStates.PoweredDown;
+        ghostsEatenCounter = 1;
     }
 }

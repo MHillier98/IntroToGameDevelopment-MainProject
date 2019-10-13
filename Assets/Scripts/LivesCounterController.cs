@@ -11,7 +11,7 @@ public class LivesCounterController : MonoBehaviour
     public int playerLivesCurrent = 0;
     public int playerLivesMax = 0;
 
-    void Start()
+    private void Start()
     {
         livesText = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Ms Pac-Man").gameObject.GetComponent<PlayerController>();
@@ -22,7 +22,7 @@ public class LivesCounterController : MonoBehaviour
         UpdateLifeCounter(playerLivesCurrent, playerLivesMax);
     }
 
-    void Update()
+    private void Update()
     {
         playerLivesCurrent = playerController.GetCurrentLives();
         UpdateLifeCounter(playerLivesCurrent, playerLivesMax);

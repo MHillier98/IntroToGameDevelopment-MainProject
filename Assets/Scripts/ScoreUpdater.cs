@@ -14,7 +14,7 @@ public class ScoreUpdater : MonoBehaviour
     public bool isHighScorer = false;
     private int highScore = 0;
 
-    void Start()
+    private void Start()
     {
         scorerText = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Ms Pac-Man").gameObject.GetComponent<PlayerController>();
@@ -27,7 +27,7 @@ public class ScoreUpdater : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         int playerScore = playerController.GetScore();
 
