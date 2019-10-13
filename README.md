@@ -16,3 +16,6 @@ I chose to recreate 'Ms. Pac-Man', which came with the following constraints:
 
 # Design Task
 // todo: add info about the design component of assessment 4
+
+# Pre-Recorded Demo Video
+You can watch an overview of the project [here](https://youtu.be/ycFHJ6bS4yU)
