@@ -299,34 +299,29 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Powerup"))
         {
-            Debug.Log(collision.name);
-            switch (collision.name)
+            if (collision.name.Contains("Double Points"))
             {
-                case "Double Points":
-                    SetScoreModifier(2);
-                    break;
-
-                case "Extra Life":
-                    AddLife();
-                    break;
-
-                case "Freeze":
-                    Freeze();
-                    break;
-
-                case "Invisible Walls":
-                    gameManager.SendMessage("HideWalls");
-                    break;
-
-                case "No Points":
-                    SetScoreModifier(0);
-                    break;
-
-                case "Speed Boost":
-                    SpeedUp(1.4f);
-                    break;
-
-                default: return;
+                SetScoreModifier(2);
+            }
+            else if (collision.name.Contains("Extra Life"))
+            {
+                AddLife();
+            }
+            else if (collision.name.Contains("Freeze"))
+            {
+                Freeze();
+            }
+            else if (collision.name.Contains("Invisible Walls"))
+            {
+                gameManager.SendMessage("HideWalls");
+            }
+            else if (collision.name.Contains("No Points"))
+            {
+                SetScoreModifier(0);
+            }
+            else if (collision.name.Contains("Speed Boost"))
+            {
+                SpeedUp(1.4f);
             }
 
             Destroy(collision.gameObject);
