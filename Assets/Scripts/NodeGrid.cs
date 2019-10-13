@@ -15,12 +15,13 @@ public class NodeGrid : MonoBehaviour
     private int arraySizeX; // X size of the Node Array
     private int arraySizeY; // Y size of the Node Array
 
-    public bool debugPath = true;
-    public bool debugFullGrid = false;
-    public Color debugColor = Color.yellow;
+    public bool debugPath = true; // if we want to show the ghost's path
+    public bool debugFullGrid = false; // if we want to show the entire grid the ghost uses for pathfinding
+    public Color debugColor = Color.yellow; // the standard debug colour for paths
 
     private void Start()
     {
+        // calculate the size of each node
         nodeDiameter = nodeRadius * 2;
 
         // calculate the grid's world size
@@ -30,6 +31,9 @@ public class NodeGrid : MonoBehaviour
         CreateNodeGrid();
     }
 
+    /*
+     * Setup the node grid with a multidimensional array of nodes and determine whether they are walls or not
+     */
     private void CreateNodeGrid()
     {
         nodeArray = new PathNode[arraySizeX, arraySizeY];
@@ -62,7 +66,7 @@ public class NodeGrid : MonoBehaviour
         int checkedX; // position checked within an X range
         int checkedY; // position checked within an Y range
 
-        // right side check
+        // check the right side
         checkedX = _neighbourNode.arrayPosX + 1;
         checkedY = _neighbourNode.arrayPosY;
         if (checkedX >= 0 && checkedX < arraySizeX)
@@ -73,7 +77,7 @@ public class NodeGrid : MonoBehaviour
             }
         }
 
-        // left side check
+        // check the left side
         checkedX = _neighbourNode.arrayPosX - 1;
         checkedY = _neighbourNode.arrayPosY;
         if (checkedX >= 0 && checkedX < arraySizeX)
@@ -84,7 +88,7 @@ public class NodeGrid : MonoBehaviour
             }
         }
 
-        // top side check
+        // check the top side
         checkedX = _neighbourNode.arrayPosX;
         checkedY = _neighbourNode.arrayPosY + 1;
         if (checkedX >= 0 && checkedX < arraySizeX)
@@ -95,7 +99,7 @@ public class NodeGrid : MonoBehaviour
             }
         }
 
-        // bottom side check
+        // check the bottom side
         checkedX = _neighbourNode.arrayPosX;
         checkedY = _neighbourNode.arrayPosY - 1;
         if (checkedX >= 0 && checkedX < arraySizeX)
@@ -147,7 +151,7 @@ public class NodeGrid : MonoBehaviour
                         {
                             if (FinalPath.Contains(n))
                             {
-                                Gizmos.color = debugColor;
+                                Gizmos.color = debugColor; // these are the path nodes that we want to see
                             }
                         }
                     }

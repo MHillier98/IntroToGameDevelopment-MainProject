@@ -6,31 +6,29 @@ using UnityEngine;
 
 public class GhostController : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
-    private BoxCollider2D boxCollider2D;
-    private NodeGrid nodeGridReference;
+    private SpriteRenderer spriteRenderer; // the SpriteRenderer componenet on this ghost
+    private Animator animator; // the Animator componenet on this ghost
+    private BoxCollider2D boxCollider2D; // the BoxCollider2D componenet on this ghost
+    private NodeGrid nodeGridReference; // the NodeGrid componenet on this ghost
 
-    public enum MovementDirections { Up, Down, Left, Right };
-    public MovementDirections movementDirection = MovementDirections.Right;
+    public enum MovementDirections { Up, Down, Left, Right }; // the possible directions for the ghost to move in
+    public MovementDirections movementDirection = MovementDirections.Right; // the default movement direction
+    List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>(); // a list of possible directions that the ghost can move in
+    float timeOfDirCheck = 0f; // time since the direction check has run
 
-    List<MovementDirections> lastCanMoveDirs = new List<MovementDirections>();
-    float timeOfDirCheck = 0f;
-
-    public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter, StartReset };
-    public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
-    public PathfindingTypes defaultPathfindingType = PathfindingTypes.Follow;
+    public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter, StartReset }; // the possible types of pathfinding AI for the ghosts
+    public PathfindingTypes pathfindingType = PathfindingTypes.Follow; // the starting pathfinding type
+    public PathfindingTypes defaultPathfindingType = PathfindingTypes.Follow; // the default pathfinding type
 
     public Transform playerPosition; // player to pathfind to
     public Transform[] targetPositions; // positions to pathfind to
     public Transform[] scatterPositions; // positions to pathfind to
-    public int currentTarget = 0;
-    public int currentTargetScatter = 0;
+    public int currentTarget = 0; // the current target array position
+    public int currentTargetScatter = 0; // the current scatter target array position
 
-    public float movementSpeed = 5.5f;
-    public Transform startingPosition;
-
-    public Vector3 spawnPosition;
+    public float movementSpeed = 5.5f; // the current movement speed
+    public Transform startingPosition; // the position to move to for restarting the ghost
+    public Vector3 spawnPosition; // the position where the ghost started in this scene
 
     private void Start()
     {
@@ -287,6 +285,9 @@ public class GhostController : MonoBehaviour
         Invoke("ResetPathfindingType", 5.0f);
     }
 
+    /*
+     * Animate the sprite to look in the correct direction
+     */
     private void AnimateSprite()
     {
         switch (movementDirection)
@@ -316,6 +317,9 @@ public class GhostController : MonoBehaviour
         }
     }
 
+    /*
+     * Raycast check if the player can move in one of the 4 directions
+     */
     private bool CheckCanMove(MovementDirections direction)
     {
         float rayOffsetX = 0.0f;
@@ -384,18 +388,22 @@ public class GhostController : MonoBehaviour
         return true;
     }
 
+    /*
+     * Move the player with frame-rate independent motion
+     */
     private void Move()
     {
         transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
     }
 
+    /*
+     * Reset the ghost's position
+     */
     public void ResetPosition()
     {
         ResetPathfindingType();
         transform.position = spawnPosition;
     }
-
-
 
     /*
      * Find the path to a target through the array of nodes
@@ -459,6 +467,9 @@ public class GhostController : MonoBehaviour
         }
     }
 
+    /*
+     * Calculate the final path of nodes between the start and end nodes
+     */
     private void GetFinalPath(PathNode startingNode, PathNode endNode)
     {
         List<PathNode> finalPath = new List<PathNode>();
@@ -474,6 +485,9 @@ public class GhostController : MonoBehaviour
         nodeGridReference.FinalPath = finalPath;
     }
 
+    /*
+     * Return the distance (in world space) between two nodes
+     */
     private int GetDistance(PathNode nodeA, PathNode nodeB)
     {
         int distX = Mathf.Abs(nodeA.arrayPosX - nodeB.arrayPosX);
