@@ -23,6 +23,10 @@ public class ScoreUpdater : MonoBehaviour
         if (isHighScorer)
         {
             UpdateText(highScore);
+            if (highScore <= 100)
+            {
+                PlayerPrefs.SetInt(modeType + highScorePrefName, 5000);
+            }
         }
     }
 

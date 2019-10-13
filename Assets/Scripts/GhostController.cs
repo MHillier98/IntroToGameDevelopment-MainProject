@@ -30,12 +30,16 @@ public class GhostController : MonoBehaviour
     public float movementSpeed = 5.5f;
     public Transform startingPosition;
 
+    public Vector3 spawnPosition;
+
     private void Start()
     {
         nodeGridReference = GetComponent<NodeGrid>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+
+        spawnPosition = transform.position;
     }
 
     private void Update()
@@ -280,7 +284,7 @@ public class GhostController : MonoBehaviour
     {
         animator.SetBool("Scattering", true);
         pathfindingType = PathfindingTypes.Scatter;
-        Invoke("ResetPathfindingType", 7.0f);
+        Invoke("ResetPathfindingType", 5.0f);
     }
 
     private void AnimateSprite()
@@ -383,6 +387,12 @@ public class GhostController : MonoBehaviour
     private void Move()
     {
         transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
+    }
+
+    public void ResetPosition()
+    {
+        ResetPathfindingType();
+        transform.position = spawnPosition;
     }
 
 

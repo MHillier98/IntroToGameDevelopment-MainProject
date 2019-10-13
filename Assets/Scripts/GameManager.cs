@@ -10,6 +10,13 @@ public class GameManager : MonoBehaviour
     public AudioClip startSound = null;
 
     public GhostController[] ghosts;
+    public PlayerController player;
+
+    public GameObject dots;
+    public GameObject largeDots;
+
+    public GameObject dotPrefab = null;
+    public GameObject largeDotPrefab = null;
 
     public TextMeshProUGUI beginText;
     public TextMeshProUGUI endText;
@@ -31,6 +38,31 @@ public class GameManager : MonoBehaviour
             ghosts = FindObjectsOfType<GhostController>();
 
             StartCoroutine(StartGame());
+        }
+    }
+
+    private void Update()
+    {
+        if (!isMainMenu && dots != null && largeDots != null)
+        {
+            if (dots.transform.childCount == 0 && largeDots.transform.childCount == 0)
+            {
+                if (dotPrefab != null && largeDotPrefab != null)
+                {
+                    Destroy(dots);
+                    Destroy(largeDots);
+
+                    dots = Instantiate(dotPrefab, transform.position, transform.rotation);
+                    largeDots = Instantiate(largeDotPrefab, transform.position, transform.rotation);
+
+                    player.SendMessage("ResetPosition");
+
+                    for (int i = 0; i < ghosts.Length; i++)
+                    {
+                        ghosts[i].SendMessage("ResetPosition");
+                    }
+                }
+            }
         }
     }
 

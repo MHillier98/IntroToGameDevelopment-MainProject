@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
     public int maxLives = 3;
     public int currentLives = 3;
 
+    public float ghostEatTimer = -10f;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -50,7 +52,8 @@ public class PlayerController : MonoBehaviour
 
         gameManager = FindObjectOfType<GameManager>();
 
-        transform.position = startingPosition;
+        ResetPosition();
+
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
         currentLives = maxLives;
@@ -209,6 +212,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        CheckCollision(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        CheckCollision(collision);
+    }
+
+    private void CheckCollision(Collider2D collision)
+    {
         if (collision.gameObject.CompareTag("Dots"))
         {
             PlayEatSound();
@@ -255,22 +268,27 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (deathSound != null)
+                if (ghostEatTimer + 2f < Time.time)
                 {
-                    audioSource.PlayOneShot(deathSound);
-                }
+                    if (deathSound != null)
+                    {
+                        audioSource.PlayOneShot(deathSound);
+                    }
 
-                LoseLife();
-                StartCoroutine(PauseGame(3.0f));
-                if (currentLives > 0)
-                {
-                    transform.position = startingPosition;
-                    movementDirection = MovementDirections.Right;
-                }
-                else
-                {
-                    transform.position = new Vector3(999f, 999f);
-                    StartCoroutine(EndGame());
+                    LoseLife();
+                    StartCoroutine(PauseGame(3.0f));
+                    ghostEatTimer = Time.time;
+
+                    if (currentLives > 0)
+                    {
+                        transform.position = startingPosition;
+                        movementDirection = MovementDirections.Right;
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(999f, 999f);
+                        StartCoroutine(EndGame());
+                    }
                 }
             }
         }
@@ -362,5 +380,11 @@ public class PlayerController : MonoBehaviour
     {
         powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
+    }
+
+    public void ResetPosition()
+    {
+        movementDirection = MovementDirections.Right;
+        transform.position = startingPosition;
     }
 }

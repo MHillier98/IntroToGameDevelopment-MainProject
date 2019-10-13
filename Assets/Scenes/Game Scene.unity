@@ -217,6 +217,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 452631945771788840, guid: b5264b5759594254c8b498f639488c21,
         type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 696601482}
+    - target: {fileID: 452631945771788840, guid: b5264b5759594254c8b498f639488c21,
+        type: 3}
+      propertyPath: dots
+      value: 
+      objectReference: {fileID: 1020739067}
+    - target: {fileID: 452631945771788840, guid: b5264b5759594254c8b498f639488c21,
+        type: 3}
+      propertyPath: largeDots
+      value: 
+      objectReference: {fileID: 907640298}
+    - target: {fileID: 452631945771788840, guid: b5264b5759594254c8b498f639488c21,
+        type: 3}
       propertyPath: beginText
       value: 
       objectReference: {fileID: 931695490}
@@ -227,6 +242,18 @@ PrefabInstance:
       objectReference: {fileID: 1356177363}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5264b5759594254c8b498f639488c21, type: 3}
+--- !u!114 &696601482 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4403822621839253143, guid: 01efa70f0b783eb4fb9ff965c84517e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4403822622041484010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d90df33bfad60f4384dd5f0f7753b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &729704769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 729704769, guid: 848f3d6ba95c548488b565b997cda69b,
@@ -238,6 +265,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8645632093585980476, guid: 848f3d6ba95c548488b565b997cda69b,
     type: 3}
   m_PrefabInstance: {fileID: 8645632093303397590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &907640298 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7878059092805463912, guid: 0daa34ebe2e090b44b4273896acb28dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7878059091489122609}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &931695490 stripped
 MonoBehaviour:
@@ -251,6 +284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1020739067 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6043108797071281433, guid: 58461515fb583ce40bc57a08ad9f004a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6043108795951356767}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1089463350 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8645632094392760544, guid: 848f3d6ba95c548488b565b997cda69b,
@@ -316,6 +355,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Orange Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 240189216006994939, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 240189216006994933, guid: 4b7a2ed9dc30e1342a657641d2d7ddc0,
         type: 3}
@@ -817,6 +861,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pink Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 4799011693673441961, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4799011693673441963, guid: 81544cb3c7cc78e46be74ebb26b8cbe0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -921,6 +970,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Blue Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141553797590013830, guid: 7bb7a6f20b94f014ca11e653dfd87074,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141553797590013828, guid: 7bb7a6f20b94f014ca11e653dfd87074,
         type: 3}
@@ -1087,6 +1141,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Red Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 5905008786000379595, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5905008786000379597, guid: 39645f31c69b4ac4fbc34593df3c6fd0,
         type: 3}

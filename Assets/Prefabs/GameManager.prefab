@@ -46,6 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startSound: {fileID: 8300000, guid: f6187bb4443261b4b95263c7378afbb6, type: 3}
   ghosts: []
+  player: {fileID: 0}
+  dots: {fileID: 0}
+  largeDots: {fileID: 0}
+  dotPrefab: {fileID: 6043108797071281433, guid: 58461515fb583ce40bc57a08ad9f004a,
+    type: 3}
+  largeDotPrefab: {fileID: 7878059092805463912, guid: 0daa34ebe2e090b44b4273896acb28dd,
+    type: 3}
   beginText: {fileID: 0}
   endText: {fileID: 0}
   isMainMenu: 0
