@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class PlayerController : MonoBehaviour
     public AudioClip eatGhostSound = null;
     public AudioClip deathSound = null;
 
+    public int maxLives = 3;
+    public int currentLives = 3;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -49,6 +53,7 @@ public class PlayerController : MonoBehaviour
         transform.position = startingPosition;
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
+        currentLives = maxLives;
 
         powerState = PoweredStates.PoweredDown;
         movementDirection = MovementDirections.Right;
@@ -254,8 +259,16 @@ public class PlayerController : MonoBehaviour
                     audioSource.PlayOneShot(deathSound);
                 }
 
-                transform.position = startingPosition;
-                movementDirection = MovementDirections.Right;
+                LoseLife();
+                if (currentLives > 0)
+                {
+                    transform.position = startingPosition;
+                    movementDirection = MovementDirections.Right;
+                }
+                else
+                {
+                    SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+                }
             }
         }
     }
@@ -303,5 +316,25 @@ public class PlayerController : MonoBehaviour
     {
         powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
+    }
+
+    public int GetCurrentLives()
+    {
+        return currentLives;
+    }
+
+    public int GetMaxLives()
+    {
+        return maxLives;
+    }
+
+    public void ResetLives()
+    {
+        currentLives = maxLives;
+    }
+
+    public void LoseLife()
+    {
+        currentLives--;
     }
 }

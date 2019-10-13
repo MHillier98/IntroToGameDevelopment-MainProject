@@ -163,17 +163,17 @@ PrefabInstance:
     - target: {fileID: 452631945771788843, guid: b5264b5759594254c8b498f639488c21,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.1117215
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452631945771788843, guid: b5264b5759594254c8b498f639488c21,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9679444
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452631945771788843, guid: b5264b5759594254c8b498f639488c21,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.18586403
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452631945771788843, guid: b5264b5759594254c8b498f639488c21,
         type: 3}
@@ -666,6 +666,26 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2985764023713020313, guid: 336270f8a2179ab4390e4afccd8f3a97,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 633159501715001691, guid: 336270f8a2179ab4390e4afccd8f3a97,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 633159501715001691, guid: 336270f8a2179ab4390e4afccd8f3a97,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485488988552930309, guid: 336270f8a2179ab4390e4afccd8f3a97,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485488988552930309, guid: 336270f8a2179ab4390e4afccd8f3a97,
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -1373,26 +1393,6 @@ PrefabInstance:
     - target: {fileID: 8645632094871926187, guid: 848f3d6ba95c548488b565b997cda69b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 571574651, guid: 848f3d6ba95c548488b565b997cda69b, type: 3}
-      propertyPath: m_Name
-      value: Ghost Start
-      objectReference: {fileID: 0}
-    - target: {fileID: 571574652, guid: 848f3d6ba95c548488b565b997cda69b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7745752, guid: 848f3d6ba95c548488b565b997cda69b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1670676051, guid: 848f3d6ba95c548488b565b997cda69b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 592198854, guid: 848f3d6ba95c548488b565b997cda69b, type: 3}
-      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

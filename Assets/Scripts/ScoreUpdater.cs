@@ -23,7 +23,7 @@ public class ScoreUpdater : MonoBehaviour
 
         if (isHighScorer)
         {
-            scorerText.text = highScore.ToString();
+            UpdateText(highScore);
         }
     }
 
@@ -37,12 +37,17 @@ public class ScoreUpdater : MonoBehaviour
             {
                 highScore = playerScore;
                 PlayerPrefs.SetInt(modeType + highScorePrefName, highScore);
-                scorerText.text = playerScore.ToString();
+                UpdateText(playerScore);
             }
         }
         else
         {
-            scorerText.text = playerScore.ToString();
+            UpdateText(playerScore);
         }
+    }
+
+    private void UpdateText(int score)
+    {
+        scorerText.text = score.ToString();
     }
 }
