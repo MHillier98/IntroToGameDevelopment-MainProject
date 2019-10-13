@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
     public float movementSpeed = 6.0f;
+    public float defaultSpeed = 6.0f;
 
     public AudioClip chompSound1 = null;
     public AudioClip chompSound2 = null;
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
     private static int largeDotScore = 50;
     private static int ghostScore = 100;
 
+    public int scoreModifier = 1;
+
     public GameObject dotParticleObject = null;
 
     private int ghostsEatenCounter = 1;
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
     public float ghostEatTimer = -10f;
 
+    public bool frozen = false;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -53,15 +58,15 @@ public class PlayerController : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
 
         ResetPosition();
+        ResetSpeed();
+        ResetLives();
 
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
-        currentLives = maxLives;
 
         powerState = PoweredStates.PoweredDown;
         movementDirection = MovementDirections.Right;
 
-        movementSpeed = 6.0f;
         playedChomp1 = false;
     }
 
@@ -70,7 +75,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         AnimateSprite();
 
-        if (CheckCanMove(movementDirection))
+        if (!frozen && CheckCanMove(movementDirection))
         {
             Move();
         }
@@ -292,6 +297,40 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        else if (collision.gameObject.CompareTag("Powerup"))
+        {
+            Debug.Log(collision.name);
+            switch (collision.name)
+            {
+                case "Double Points":
+                    SetScoreModifier(2);
+                    break;
+
+                case "Extra Life":
+                    AddLife();
+                    break;
+
+                case "Freeze":
+                    Freeze();
+                    break;
+
+                case "Invisible Walls":
+                    gameManager.SendMessage("HideWalls");
+                    break;
+
+                case "No Points":
+                    SetScoreModifier(0);
+                    break;
+
+                case "Speed Boost":
+                    SpeedUp(1.4f);
+                    break;
+
+                default: return;
+            }
+
+            Destroy(collision.gameObject);
+        }
     }
 
     private void PlayEatSound()
@@ -348,7 +387,10 @@ public class PlayerController : MonoBehaviour
 
     public void AddScore(int addScore)
     {
-        currentScore += addScore;
+        if (scoreModifier > 0)
+        {
+            currentScore += (addScore * scoreModifier);
+        }
     }
 
     public void ResetLives()
@@ -364,6 +406,11 @@ public class PlayerController : MonoBehaviour
     public int GetMaxLives()
     {
         return maxLives;
+    }
+
+    public void AddLife()
+    {
+        currentLives++;
     }
 
     public void LoseLife()
@@ -386,5 +433,78 @@ public class PlayerController : MonoBehaviour
     {
         movementDirection = MovementDirections.Right;
         transform.position = startingPosition;
+    }
+
+    private IEnumerator SpeedIncrease(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        ResetSpeed();
+    }
+
+    public void SpeedUp(float increaseBy)
+    {
+        movementSpeed *= increaseBy;
+        StartCoroutine(SpeedIncrease(4.0f));
+    }
+
+    public void ResetSpeed()
+    {
+        movementSpeed = defaultSpeed;
+    }
+
+    private IEnumerator UpdateScoreModifier(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        ResetScoreModifier();
+    }
+
+    public void SetScoreModifier(int newModifier)
+    {
+        scoreModifier = newModifier;
+        StartCoroutine(UpdateScoreModifier(4.0f));
+    }
+
+    public void ResetScoreModifier()
+    {
+        scoreModifier = 1;
+    }
+
+    private IEnumerator Unfreeze(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        SetFrozen(false);
+    }
+
+    public void Freeze()
+    {
+        frozen = true;
+        StartCoroutine(Unfreeze(4.0f));
+    }
+
+    public void SetFrozen(bool isFrozen)
+    {
+        frozen = isFrozen;
+    }
+
+    public void SetSpriteTransparent()
+    {
+        spriteRenderer.color = new Color(255f, 255f, 255f, 0.5f);
+    }
+
+    public void SetSpriteSolid()
+    {
+        spriteRenderer.color = new Color(255f, 255f, 255f, 1f);
     }
 }

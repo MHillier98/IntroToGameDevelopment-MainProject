@@ -9,6 +9,8 @@ TagManager:
   - Walls
   - Ghosts
   - Large Dots
+  - Powerup
+  - Powerup Base
   layers:
   - Default
   - TransparentFX
@@ -46,11 +48,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Powerup Base
+    uniqueID: 3598053417
+    locked: 0
   - name: Dots
     uniqueID: 1791609971
     locked: 0
   - name: Large Dots
     uniqueID: 251032781
+    locked: 0
+  - name: Powerup
+    uniqueID: 2004687827
     locked: 0
   - name: Ghosts
     uniqueID: 884613931
