@@ -18,7 +18,6 @@ public class ScoreUpdater : MonoBehaviour
     {
         scorerText = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Ms Pac-Man").gameObject.GetComponent<PlayerController>();
-
         highScore = PlayerPrefs.GetInt(modeType + highScorePrefName, highScore);
 
         if (isHighScorer)

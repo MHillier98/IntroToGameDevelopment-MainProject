@@ -246,7 +246,7 @@ public class PlayerController : MonoBehaviour
 
                 AddScore(ghostScore * ghostsEatenCounter);
                 ghostsEatenCounter += 1;
-                StartCoroutine(PauseGame(1f));
+                StartCoroutine(PauseGame(1.0f));
 
                 if (eatGhostSound != null)
                 {
@@ -261,16 +261,16 @@ public class PlayerController : MonoBehaviour
                 }
 
                 LoseLife();
+                StartCoroutine(PauseGame(3.0f));
                 if (currentLives > 0)
                 {
-                    StartCoroutine(PauseGame(3f));
                     transform.position = startingPosition;
                     movementDirection = MovementDirections.Right;
                 }
                 else
                 {
-                    StartCoroutine(PauseGame(6f));
-                    SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+                    transform.position = new Vector3(999f, 999f);
+                    StartCoroutine(EndGame());
                 }
             }
         }
@@ -299,6 +299,18 @@ public class PlayerController : MonoBehaviour
             yield return 0;
         }
         Time.timeScale = 1f;
+    }
+
+    private IEnumerator EndGame()
+    {
+        gameManager.SendMessage("ScatterAllGhosts");
+        gameManager.SendMessage("EndGame");
+        float pauseEndTime = Time.realtimeSinceStartup + 5.0f;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
     }
 
     public void SetScore(int newScore)

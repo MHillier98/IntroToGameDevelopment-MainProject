@@ -124,6 +124,8 @@ MonoBehaviour:
     type: 3}
   eatGhostSound: {fileID: 8300000, guid: b75f96d4f8b12614a8e0d5ac99e682ae, type: 3}
   deathSound: {fileID: 8300000, guid: 4151fe84818c43c49b9331d79d1a76c3, type: 3}
+  maxLives: 3
+  currentLives: 3
 --- !u!50 &4403822621839253141
 Rigidbody2D:
   serializedVersion: 4

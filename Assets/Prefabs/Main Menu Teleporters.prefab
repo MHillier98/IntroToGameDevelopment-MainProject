@@ -191,6 +191,11 @@ PrefabInstance:
       propertyPath: teleportToPoint.x
       value: -20
       objectReference: {fileID: 0}
+    - target: {fileID: 1238547264668609393, guid: 887e2801fcad6554785e62501cd98c0b,
+        type: 3}
+      propertyPath: teleportToPoint.y
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 5429471424951263613, guid: 887e2801fcad6554785e62501cd98c0b,
         type: 3}
       propertyPath: m_Size.y
@@ -360,6 +365,11 @@ PrefabInstance:
         type: 3}
       propertyPath: teleportToPoint.x
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238547264668609393, guid: 887e2801fcad6554785e62501cd98c0b,
+        type: 3}
+      propertyPath: teleportToPoint.y
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 5429471424951263613, guid: 887e2801fcad6554785e62501cd98c0b,
         type: 3}
