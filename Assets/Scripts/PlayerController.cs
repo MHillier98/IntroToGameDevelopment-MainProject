@@ -6,44 +6,49 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private AudioSource audioSource;
+    private SpriteRenderer spriteRenderer; // the SpriteRenderer componenet on this player
+    private AudioSource audioSource; // the AudioSource component to play sounds through
 
-    private GameManager gameManager;
+    private GameManager gameManager; // the game manager script in the scene
 
-    public enum PoweredStates { PoweredUp, PoweredDown }
-    private PoweredStates powerState = PoweredStates.PoweredDown;
+    public enum PoweredStates { PoweredUp, PoweredDown } // the possible states of whether the player can eat ghosts or not
+    private PoweredStates powerState = PoweredStates.PoweredDown; // by default it shouldn't be powered up on start
 
-    private static int poweredUpTimeMax = 6;
-    private int poweredUpTimeCurrent;
+    private static int poweredUpTimeMax = 6; // how long the powered up time goes for
+    private int poweredUpTimeCurrent; // the current powered up time
 
-    public enum MovementDirections { Up, Down, Left, Right };
-    public MovementDirections movementDirection = MovementDirections.Right;
+    public enum MovementDirections { Up, Down, Left, Right }; // the possible directions for the player to move in
+    public MovementDirections movementDirection = MovementDirections.Right; // the default movement direction
 
-    public Vector3 startingPosition = new Vector3(0f, -2f, 0f);
-    public float movementSpeed = 6.0f;
+    public Vector3 startingPosition = new Vector3(0f, -2f, 0f); // the default starting position of a player
+    public float movementSpeed = 6.0f; // the current movement speed
+    public float defaultSpeed = 6.0f; // the default movement speed
 
-    public AudioClip chompSound1 = null;
-    public AudioClip chompSound2 = null;
-    private bool playedChomp1 = false;
+    public AudioClip chompSound1 = null; // the first sound to play when eating dots
+    public AudioClip chompSound2 = null; // the second sound to play when eating dots
+    private bool playedChomp1 = false; // if the first sound has played yet, so we can play the second
 
-    private static int startingScore = 0;
-    private int currentScore = 0;
+    private static int startingScore = 0; // the score to start the player with
+    private int currentScore = 0; // the current player score
 
-    private static int dotScore = 10;
-    private static int largeDotScore = 50;
-    private static int ghostScore = 100;
+    private static int dotScore = 10; // the score for a normal dot
+    private static int largeDotScore = 50; // the score for a large dot
+    private static int ghostScore = 100; // the score for a ghost
 
-    public GameObject dotParticleObject = null;
+    public int scoreModifier = 1; // the score modifier, used to multiply the score when adding
 
-    private int ghostsEatenCounter = 1;
-    public AudioClip eatGhostSound = null;
-    public AudioClip deathSound = null;
+    public GameObject dotParticleObject = null; // the particle object to spawn when a large dot is eaten
 
-    public int maxLives = 3;
-    public int currentLives = 3;
+    private int ghostsEatenCounter = 1; // how many ghosts eaten in a row
+    public AudioClip eatGhostSound = null; // the sound to play when a ghost is eated
+    public AudioClip deathSound = null; // the sound to play when the player dies
 
-    public float ghostEatTimer = -10f;
+    public int maxLives = 3; // the max number of lives the player has
+    public int currentLives = 3; // the current number of lives the player has
+
+    public float ghostEatTimer = -10f; // the timer for how often the ghosts can defeat the player, so that the player won't get stuck in spawn in some situations
+
+    public bool frozen = false; // if the player can move
 
     private void Start()
     {
@@ -53,15 +58,15 @@ public class PlayerController : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
 
         ResetPosition();
+        ResetSpeed();
+        ResetLives();
 
         currentScore = startingScore;
         poweredUpTimeCurrent = poweredUpTimeMax;
-        currentLives = maxLives;
 
         powerState = PoweredStates.PoweredDown;
         movementDirection = MovementDirections.Right;
 
-        movementSpeed = 6.0f;
         playedChomp1 = false;
     }
 
@@ -70,12 +75,15 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         AnimateSprite();
 
-        if (CheckCanMove(movementDirection))
+        if (!frozen && CheckCanMove(movementDirection))
         {
             Move();
         }
     }
 
+    /*
+     * Handle the keyboard movement inputs, checking if the player can move in that direction
+     */
     private void HandleMovementInput()
     {
         if (Input.GetAxis("Horizontal") > 0)
@@ -108,6 +116,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*
+     * Animate the sprite to look in the correct direction
+     */
     private void AnimateSprite()
     {
         switch (movementDirection)
@@ -137,6 +148,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*
+     * Raycast check if the player can move in one of the 4 directions
+     */
     private bool CheckCanMove(MovementDirections direction)
     {
         float rayOffsetX = 0.0f;
@@ -205,6 +219,9 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    /*
+     * Move the player with frame-rate independent motion
+     */
     private void Move()
     {
         transform.Translate(new Vector3(movementSpeed, 0f, 0f) * Time.deltaTime, Space.Self);
@@ -220,6 +237,9 @@ public class PlayerController : MonoBehaviour
         CheckCollision(collision);
     }
 
+    /*
+     * Check and handle the collisions encounted by the collider
+     */
     private void CheckCollision(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Dots"))
@@ -292,8 +312,40 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        else if (collision.gameObject.CompareTag("Powerup"))
+        {
+            if (collision.name.Contains("Double Points"))
+            {
+                SetScoreModifier(2);
+            }
+            else if (collision.name.Contains("Extra Life"))
+            {
+                AddLife();
+            }
+            else if (collision.name.Contains("Freeze"))
+            {
+                Freeze();
+            }
+            else if (collision.name.Contains("Invisible Walls"))
+            {
+                gameManager.SendMessage("HideWalls");
+            }
+            else if (collision.name.Contains("No Points"))
+            {
+                SetScoreModifier(0);
+            }
+            else if (collision.name.Contains("Speed Boost"))
+            {
+                SpeedUp(1.4f);
+            }
+
+            Destroy(collision.gameObject);
+        }
     }
 
+    /*
+     * Play the two different dot eating sounds, alternating to create the "waka" sound effect
+     */
     private void PlayEatSound()
     {
         if (playedChomp1 && chompSound2 != null)
@@ -308,6 +360,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*
+     * Pause the game while something happens
+     */
     private IEnumerator PauseGame(float time)
     {
         Time.timeScale = 0f;
@@ -319,6 +374,9 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    /*
+     * End the game
+     */
     private IEnumerator EndGame()
     {
         gameManager.SendMessage("ScatterAllGhosts");
@@ -331,60 +389,210 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
     }
 
+    /*
+     * Set the score of the player
+     */
     public void SetScore(int newScore)
     {
         currentScore = newScore;
     }
 
+    /*
+     * Get the score of the player
+     */
     public int GetScore()
     {
         return currentScore;
     }
 
+    /*
+     * Increment the score of the player
+     */
     public void IncrementScore()
     {
         currentScore += 1;
     }
 
+    /*
+     * Add to the score of the player, multiplying by the scoreModifier
+     */
     public void AddScore(int addScore)
     {
-        currentScore += addScore;
+        if (scoreModifier > 0)
+        {
+            currentScore += (addScore * scoreModifier);
+        }
     }
 
+    /*
+     * Reset the number of lives the player has
+     */
     public void ResetLives()
     {
         currentLives = maxLives;
     }
 
+    /*
+     * Get the number of lives the player has
+     */
     public int GetCurrentLives()
     {
         return currentLives;
     }
 
+    /*
+     * Get the max number of lives the player has
+     */
     public int GetMaxLives()
     {
         return maxLives;
     }
 
+    /*
+     * Add to the number of lives the player has
+     */
+    public void AddLife()
+    {
+        currentLives++;
+    }
+
+    /*
+     * Remove one life from the number of lives the player has
+     */
     public void LoseLife()
     {
         currentLives--;
     }
 
+    /*
+     * Set the player's power state to Powered Up
+     */
     public void PowerUp()
     {
         powerState = PoweredStates.PoweredUp;
     }
 
+    /*
+     * Set the player's power state to Powered Down
+     */
     public void PowerDown()
     {
         powerState = PoweredStates.PoweredDown;
         ghostsEatenCounter = 1;
     }
 
+    /*
+     * Reset the player's position
+     */
     public void ResetPosition()
     {
         movementDirection = MovementDirections.Right;
         transform.position = startingPosition;
+    }
+
+    /*
+     * Increase the speed of the player, and reset it after the specified time
+     */
+    private IEnumerator SpeedIncrease(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        ResetSpeed();
+    }
+
+    /*
+     * Multiply the speed of the player 
+     */
+    public void SpeedUp(float increaseBy)
+    {
+        movementSpeed *= increaseBy;
+        StartCoroutine(SpeedIncrease(4.0f));
+    }
+
+    /*
+     * Reset the speed of the player 
+     */
+    public void ResetSpeed()
+    {
+        movementSpeed = defaultSpeed;
+    }
+
+    /*
+     * Reset the score modifier after a specified time
+     */
+    private IEnumerator UpdateScoreModifier(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        ResetScoreModifier();
+    }
+
+    /*
+     * Set the score modifier
+     */
+    public void SetScoreModifier(int newModifier)
+    {
+        scoreModifier = newModifier;
+        StartCoroutine(UpdateScoreModifier(4.0f));
+    }
+
+    /*
+     * Reset the score modifier
+     */
+    public void ResetScoreModifier()
+    {
+        scoreModifier = 1;
+    }
+
+    /*
+     * Unfreeze the player after a specified time
+     */
+    private IEnumerator Unfreeze(float time)
+    {
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        SetFrozen(false);
+    }
+
+    /*
+     * Freeze the player and unfreeze after 4 seconds
+     */
+    public void Freeze()
+    {
+        frozen = true;
+        StartCoroutine(Unfreeze(4.0f));
+    }
+
+    /*
+     * Set the freeze value manually
+     */
+    public void SetFrozen(bool isFrozen)
+    {
+        frozen = isFrozen;
+    }
+
+    /*
+     * Set the transparency of the SpriteRenderer to half transparent
+     */
+    public void SetSpriteTransparent()
+    {
+        spriteRenderer.color = new Color(255f, 255f, 255f, 0.5f);
+    }
+
+    /*
+     * Set the transparency of the SpriteRenderer to full
+     */
+    public void SetSpriteSolid()
+    {
+        spriteRenderer.color = new Color(255f, 255f, 255f, 1f);
     }
 }
