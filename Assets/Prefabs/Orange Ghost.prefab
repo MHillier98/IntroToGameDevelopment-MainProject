@@ -149,6 +149,7 @@ MonoBehaviour:
   distanceBetweenNodes: 0.5
   debugPath: 1
   debugFullGrid: 0
+  debugColor: {r: 0.9686275, g: 0.59607846, b: 0.003921569, a: 1}
 --- !u!114 &105608987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: 3
   pathfindingType: 0
+  defaultPathfindingType: 0
   playerPosition: {fileID: 0}
   targetPositions: []
   scatterPositions:
@@ -172,6 +174,7 @@ MonoBehaviour:
   currentTarget: 0
   currentTargetScatter: 0
   movementSpeed: 5.5
+  startingPosition: {fileID: 0}
 --- !u!50 &1460932469
 Rigidbody2D:
   serializedVersion: 4

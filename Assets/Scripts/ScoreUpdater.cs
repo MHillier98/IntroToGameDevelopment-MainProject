@@ -14,20 +14,23 @@ public class ScoreUpdater : MonoBehaviour
     public bool isHighScorer = false;
     private int highScore = 0;
 
-    void Start()
+    private void Start()
     {
         scorerText = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Ms Pac-Man").gameObject.GetComponent<PlayerController>();
-
         highScore = PlayerPrefs.GetInt(modeType + highScorePrefName, highScore);
 
         if (isHighScorer)
         {
-            scorerText.text = highScore.ToString();
+            UpdateText(highScore);
+            if (highScore <= 100)
+            {
+                PlayerPrefs.SetInt(modeType + highScorePrefName, 5000);
+            }
         }
     }
 
-    void Update()
+    private void Update()
     {
         int playerScore = playerController.GetScore();
 
@@ -37,12 +40,17 @@ public class ScoreUpdater : MonoBehaviour
             {
                 highScore = playerScore;
                 PlayerPrefs.SetInt(modeType + highScorePrefName, highScore);
-                scorerText.text = playerScore.ToString();
+                UpdateText(playerScore);
             }
         }
         else
         {
-            scorerText.text = playerScore.ToString();
+            UpdateText(playerScore);
         }
+    }
+
+    private void UpdateText(int score)
+    {
+        scorerText.text = score.ToString();
     }
 }
