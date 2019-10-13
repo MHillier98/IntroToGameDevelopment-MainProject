@@ -17,6 +17,7 @@ public class NodeGrid : MonoBehaviour
 
     public bool debugPath = true;
     public bool debugFullGrid = false;
+    public Color debugColor = Color.yellow;
 
     private void Start()
     {
@@ -146,7 +147,7 @@ public class NodeGrid : MonoBehaviour
                         {
                             if (FinalPath.Contains(n))
                             {
-                                Gizmos.color = Color.yellow;
+                                Gizmos.color = debugColor;
                             }
                         }
                     }
@@ -155,7 +156,7 @@ public class NodeGrid : MonoBehaviour
                         Gizmos.color = Color.red;
                     }
 
-                    if (debugFullGrid || Gizmos.color == Color.yellow)
+                    if (debugFullGrid || Gizmos.color == debugColor)
                     {
                         Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - distanceBetweenNodes));
                     }

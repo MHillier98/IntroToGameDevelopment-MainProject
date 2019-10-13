@@ -149,6 +149,7 @@ MonoBehaviour:
   distanceBetweenNodes: 0.5
   debugPath: 1
   debugFullGrid: 0
+  debugColor: {r: 0.9725491, g: 0.7843138, b: 0.87843144, a: 1}
 --- !u!114 &1082660407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: 3
   pathfindingType: 1
-  lastPathfindingType: 0
+  defaultPathfindingType: 1
   playerPosition: {fileID: 0}
   targetPositions:
   - {fileID: 0}

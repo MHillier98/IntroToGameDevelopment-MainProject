@@ -1,5 +1,5 @@
 # IntroToGameDevelopment-MainProject
-The Unity game project for Intro To Game Development as Assessments 3 + 4.
+The Unity game project for Intro To Game Development's Assessments 3 and 4
 
 This project was built in [Unity 2018.3.14f1](https://unity.com/)
 

@@ -246,6 +246,7 @@ public class PlayerController : MonoBehaviour
 
                 AddScore(ghostScore * ghostsEatenCounter);
                 ghostsEatenCounter += 1;
+                StartCoroutine(PauseGame(1f));
 
                 if (eatGhostSound != null)
                 {
@@ -262,11 +263,13 @@ public class PlayerController : MonoBehaviour
                 LoseLife();
                 if (currentLives > 0)
                 {
+                    StartCoroutine(PauseGame(3f));
                     transform.position = startingPosition;
                     movementDirection = MovementDirections.Right;
                 }
                 else
                 {
+                    StartCoroutine(PauseGame(6f));
                     SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
                 }
             }
@@ -285,6 +288,17 @@ public class PlayerController : MonoBehaviour
             audioSource.PlayOneShot(chompSound1);
             playedChomp1 = true;
         }
+    }
+
+    public IEnumerator PauseGame(float time)
+    {
+        Time.timeScale = 0f;
+        float pauseEndTime = Time.realtimeSinceStartup + time;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        Time.timeScale = 1f;
     }
 
     public void SetScore(int newScore)

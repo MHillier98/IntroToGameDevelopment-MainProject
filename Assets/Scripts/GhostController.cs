@@ -7,6 +7,8 @@ using UnityEngine;
 public class GhostController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private BoxCollider2D boxCollider2D;
     private NodeGrid nodeGridReference;
 
     public enum MovementDirections { Up, Down, Left, Right };
@@ -17,7 +19,7 @@ public class GhostController : MonoBehaviour
 
     public enum PathfindingTypes { Random, Clockwise, Run, Follow, Scatter, StartReset };
     public PathfindingTypes pathfindingType = PathfindingTypes.Follow;
-    public PathfindingTypes lastPathfindingType;
+    public PathfindingTypes defaultPathfindingType = PathfindingTypes.Follow;
 
     public Transform playerPosition; // player to pathfind to
     public Transform[] targetPositions; // positions to pathfind to
@@ -32,6 +34,8 @@ public class GhostController : MonoBehaviour
     {
         nodeGridReference = GetComponent<NodeGrid>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     private void Update()
@@ -89,31 +93,33 @@ public class GhostController : MonoBehaviour
 
         if (myTempX == startTempX && myTempY == startTempY)
         {
-            BoxCollider2D box = GetComponent<BoxCollider2D>();
-            box.enabled = true;
             ResetPathfindingType();
         }
     }
 
     public void Die()
     {
-        lastPathfindingType = pathfindingType;
+        animator.SetBool("Dead", true);
         pathfindingType = PathfindingTypes.StartReset;
+        boxCollider2D.enabled = false;
 
-        BoxCollider2D box = GetComponent<BoxCollider2D>();
-        box.enabled = false;
+        //Invoke("ResetPathfindingType", 7.0f);
     }
 
     public void InvokeScatter()
     {
-        lastPathfindingType = pathfindingType;
+        animator.SetBool("Scattering", true);
         pathfindingType = PathfindingTypes.Scatter;
+
         Invoke("ResetPathfindingType", 7.0f);
     }
 
     public void ResetPathfindingType()
     {
-        pathfindingType = lastPathfindingType;
+        boxCollider2D.enabled = true;
+        pathfindingType = defaultPathfindingType;
+        animator.SetBool("Scattering", false);
+        animator.SetBool("Dead", false);
     }
 
     private void Scatter()
